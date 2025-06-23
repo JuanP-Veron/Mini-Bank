@@ -2,6 +2,36 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
 
+src/
+└── app/
+├── mods/
+│ └── customer/
+│ ├── components/
+│ │ └── customer-table/
+│ │ ├── customer-table.component.ts
+│ │ ├── customer-table.component.html
+│ │ └── customer-table.component.css
+│ ├── dialogs/
+│ │ └── customer-edit/
+│ │ ├── customer-edit.dialog.ts
+│ │ ├── customer-edit.dialog.html
+│ │ └── customer-edit.dialog.css
+│ ├── page/
+│ │ └── customer-page/
+│ │ ├── customer-page.ts
+│ │ ├── customer-page.html
+│ │ └── customer-page.css
+│ ├── services/
+│ │ └── customer-service.ts
+│ └── store/
+│ └── customer-api.ts
+├── portals/
+│ └── main/
+│ └── home-portal/
+│ ├── home-portal.ts
+│ ├── home-portal.html
+│ └── home-portal.css
+
 ## Development server
 
 To start a local development server, run:

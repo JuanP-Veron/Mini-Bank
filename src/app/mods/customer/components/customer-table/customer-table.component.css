@@ -1,0 +1,55 @@
+/* === Tabla en blanco y negro elegante === */
+::ng-deep .p-datatable {
+  border: 1px solid #000;
+  background-color: #cdcdcd;
+  color: #000;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+::ng-deep .p-datatable-thead > tr > th {
+  background-color: #111;
+  color: #fff; 
+  border: 1px solid #080707;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+}
+
+::ng-deep .p-datatable-tbody > tr > td {
+  border: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+}
+
+::ng-deep .p-datatable-tbody > tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* === Botón de editar: gris oscuro (elegante, sobrio) === */
+::ng-deep .p-button-edit {
+  background-color: #13c51c !important;
+  color: #fff !important;
+  border: 1px solid #222 !important;
+  transition: all 0.2s ease-in-out;
+}
+
+::ng-deep .p-button-edit:hover {
+  background-color: #09ff00 !important;
+  border-color: #e1e1e1 !important;
+}
+
+/* === Botón de eliminar: rojo apagado elegante === */
+::ng-deep .p-button-delete {
+  background-color: #8b0000 !important;  /* rojo oscuro */
+  color: #fff !important;
+  border: 1px solid #5c0000 !important;
+  transition: all 0.2s ease-in-out;
+}
+
+::ng-deep .p-button-delete:hover {
+  background-color: #d10202 !important;
+  border-color: #0d0505 !important;
+}

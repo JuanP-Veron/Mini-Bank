@@ -1,0 +1,39 @@
+<p-table [value]="_list" [tableStyle]="{ 'min-width': '50rem' }">
+  <!-- CABECERA -->
+  <ng-template #header>
+    <tr>
+      <th>ID</th>
+      <th>ID Cliente</th>
+      <th>Saldo</th>
+      <th style="text-align: center;">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <!-- CUERPO -->
+  <ng-template #body let-wallet>
+    <tr>
+      <td>{{ wallet.id }}</td>
+      <td>{{ wallet.customerId }}</td>
+      <td>{{ wallet.money }}</td>
+
+      <!-- ACCIONES -->
+      <td style="text-align: center; white-space: nowrap;">
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+          <p-button 
+            pButton 
+            icon="pi pi-pencil" 
+            styleClass="p-button-text p-button-edit"
+            (click)="onEdit(wallet, $event)">
+          </p-button>
+
+          <p-button 
+            pButton 
+            icon="pi pi-trash" 
+            styleClass="p-button-text p-button-delete"
+            (click)="onDelete(wallet, $event)">
+          </p-button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

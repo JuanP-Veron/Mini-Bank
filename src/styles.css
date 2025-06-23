@@ -1,1 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  position: relative;
+}
+/* Variables por defecto (modo claro) */
+:root {
+  --fondo-menu: #ffffff;
+  --texto-menu: #000000;
+  --fondo-contenido: #f4f4f4;
+}
+
+/* Variables para modo oscuro */
+body.dark-mode {
+  --fondo-menu: #121212;
+  --texto-menu: #ffffff;
+  --fondo-contenido: #1e1e1e;
+}
+
+
+/* Estilos para igualar los inputs */
+.p-float-label input.p-inputtext, 
+.p-float-label .p-password input {
+  width: 100% !important;
+  padding: 0.75rem !important;
+  font-size: 1rem !important;
+}
+
+.p-float-label .p-password {
+  display: flex;
+  width: 100%;
+}
+
+.p-password.p-component {
+  width: 100%;
+}
+
+.p-inputtext {
+  width: 100%;
+}

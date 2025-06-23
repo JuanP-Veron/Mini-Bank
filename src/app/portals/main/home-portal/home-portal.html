@@ -1,0 +1,38 @@
+
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h3>MiniBank</h3>
+    <p-panelMenu [model]="menu"></p-panelMenu>
+  </aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Header -->
+  <header class="header">
+    <div class="spacer"></div>
+    <p-menu [popup]="true" #menuRef [model]="userMenuItems"></p-menu>
+    <p-button label="Perfil" icon="pi pi-user"   styleClass="p-button-outlined p-button-secondary" (click)="menuRef.toggle($event)" />
+  </header>
+
+  <section class="content">
+    <router-outlet></router-outlet>
+  </section>
+</div>
+
+
+<!-- Content    modsserver para guardar datos ww  suager documentacion de api    eweew  investigar pipe asss httpclient  sss  ralizar wallet(cuentas) debe hasociarse a un cliente aaaa patrones de diseno pipo
+ 
+const idx = this._value.indexOf(item.value!);
+
+  if (idx > -1) {
+
+    this._value.splice(idx, 1);
+
+  }
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+Array.prototype.splice() - JavaScript | MDN
+The splice() method of Array instances changes the contents of an array by
+removing or replacing existing elements and/or adding new elements in place.
+-->

@@ -1,0 +1,27 @@
+<p-table [value]=_list [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template #header>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Teléfono</th>
+      <th>Dirección</th>
+      <th>Correo Electrónico</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-bank>
+    <tr [pSelectableRow]="bank" (click)="onRowClick(bank, $event)">
+      <td>{{ bank.id ?? 'Sin información ' }}</td>
+      <td>{{ bank.name ?? 'Sin información ' }}</td>
+      <td>{{ bank.phone ?? 'Sin información ' }}</td>
+      <td>{{ bank.address ?? 'Sin información ' }}</td>
+      <td>{{ bank.mail ?? 'Sin información ' }}</td>
+      <td>
+        <div style="display: flex; gap: 1rem">
+          <i (click)="onEdit(bank, $event)" style="cursor: pointer" class="pi pi-pencil"></i>
+          <i (click)="onDelete(bank, $event)" style="cursor: pointer" class="pi pi-trash"></i>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

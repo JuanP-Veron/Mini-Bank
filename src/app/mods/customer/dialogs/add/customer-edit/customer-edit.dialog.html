@@ -1,0 +1,62 @@
+
+<!-- 
+  two-way binding [(ngModel)]:
+  (El two-way binding es una característica de Angular que sincroniza automáticamente
+  los datos entre el componente y la vista en ambas direcciones:
+  1. Cuando el usuario escribe en el campo, actualiza la variable en el componente.
+  2. Cuando la variable cambia en el componente, actualiza el valor mostrado en el input.
+  Esto se logra con la sintaxis [()] conocida como "banana in a box")
+-->
+
+<!-- contenedor principal -->
+<form [formGroup]="customerForm" class="p-fluid" style="padding: 1rem; min-width: 400px; max-width: 600px">
+  <div class="p-field">
+    <label for="name">Nombre*</label>
+    <input id="name" pInputText formControlName="name" />
+  </div>
+
+  <div class="p-field">
+    <label for="lastname">Apellido*</label>
+    <input id="lastname" pInputText formControlName="lastname" />
+  </div>
+
+  <div class="p-field">
+    <label for="documentNumber">Documento*</label>
+    <input id="documentNumber" pInputText formControlName="documentNumber" />
+  </div>
+
+  <div class="p-field">
+    <label for="mail">Correo electrónico</label>
+    <input id="mail" pInputText formControlName="mail" type="email" />
+  </div>
+
+  <div class="p-field">
+    <label for="phone">Teléfono</label>
+    <input id="phone" pInputText formControlName="phone" />
+  </div>
+
+  <div class="p-field">
+    <label for="address">Dirección</label>
+    <input id="address" pInputText formControlName="address"  />
+  </div>
+
+  <div class="p-field">
+    <label for="birth">Fecha de nacimiento</label>
+    <input id="birth" pInputText formControlName="birth" type="date" />
+  </div>
+
+  <div class="p-field">
+    <label for="bank">Banco*</label>
+    <p-dropdown
+      inputId="bank"
+      [options]="banks"
+      optionLabel="name"
+      optionValue="id"
+      formControlName="bankId">
+    </p-dropdown>
+    <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+      <p-button label="Guardar"(click)="save()" styleClass="p-button-success"></p-button>
+    </div>
+  </div>
+
+</form>

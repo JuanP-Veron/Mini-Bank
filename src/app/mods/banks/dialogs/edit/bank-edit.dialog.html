@@ -1,0 +1,29 @@
+<div style="display: flex; flex-direction: column; gap: 1rem; height: 100%">
+  <label> Nombre </label>
+  <input pInputText [(ngModel)]="name" placeholder="nombre"/>
+
+  <label> Documento </label>
+  <input pInputText [(ngModel)]="document" placeholder="documento"/>
+
+  <div style="margin-top: auto;">
+    <p-button label="Guardar" (click)="save()" ></p-button>
+  </div>
+
+</div>
+
+
+
+
+<!--
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+  <label> Nombre </label>
+  <input pInputText placeholder="nombre"/>
+
+  <label> Documento </label>
+  <input pInputText placeholder="documento"/>
+
+</div>
+-->
+
+

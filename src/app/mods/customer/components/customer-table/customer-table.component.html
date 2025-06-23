@@ -1,0 +1,43 @@
+<p-table [value]="_list" [tableStyle]="{ 'min-width': '50rem' }">
+  
+  <!-- CABECERA -->
+  <ng-template #header>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Documento</th>
+      <th style="text-align: center;">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <!-- CUERPO -->
+  <ng-template #body let-customer>
+    <tr [pSelectableRow]="customer" (click)="onRowClick(customer, $event)">
+      <td>{{ customer.id ?? 'Datos No Encontrados' }}</td>
+      <td>{{ customer.name ?? 'Datos No Encontrados'  }}</td>
+      <td>{{ customer.documentNumber ?? 'Datos No Encontrados'  }}</td>
+
+      <!-- ACCIONES -->
+      <td style="text-align: center; white-space: nowrap;">
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+          <!-- Botón de editar -->
+          <p-button 
+            pButton 
+            icon="pi pi-pencil"
+            styleClass="p-button-text p-button-edit"
+            (click)="onEdit(customer, $event)">
+          </p-button>
+
+          <!-- Botón de eliminar -->
+          <p-button 
+            pButton 
+            icon="pi pi-trash"
+            styleClass="p-button-text p-button-delete"
+            (click)="onDelete(customer, $event)">
+          </p-button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+</p-table>

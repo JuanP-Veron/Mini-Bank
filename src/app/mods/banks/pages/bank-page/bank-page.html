@@ -1,0 +1,10 @@
+<div style="display: flex; justify-content: space-between; width: 100%">
+
+
+  <h1>Bancos</h1>
+  <p-button icon="pi pi-plus" label="Agregar" (click)="onStartAddAction($event)"></p-button>
+</div>
+
+
+<app-bank-table [list]="bankList" (action)="onListAction($event)"> </app-bank-table>
+ 

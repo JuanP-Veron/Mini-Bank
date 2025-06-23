@@ -1,0 +1,15 @@
+<div style="display: flex; justify-content: space-between; width: 100%">
+  <h1>Wallets</h1>
+  <p-button 
+    icon="pi pi-plus" 
+    label="Agregar"
+    styleClass="p-button-outlined p-button-plain"
+    (click)="onStartAddAction($event)">
+  </p-button>
+</div>
+<br>
+
+<app-wallet-table 
+  [list]="walletList" 
+  (action)="onListAction($event)">
+</app-wallet-table>

@@ -1,0 +1,15 @@
+
+<div>
+<div style="border: 2px dashed blue; padding: 10px;">
+  <h2>Componente Padre</h2>
+  <input type="text" [(ngModel)]="enviarInput">
+  <button (click)="enviarMensaje()">enviar</button>
+  <p><strong>Respuesta del hijo:</strong> {{ mensajeDesdeHijo }}</p>
+
+  <!-- Aquí se utiliza el componente hijo -->
+    <app-saldo
+        [mensajeDesdePadre]="mensajeParaHijo"
+        (respuestaAlPadre)="recibirRespuesta($event)">
+    </app-saldo>
+</div>
+</div>
