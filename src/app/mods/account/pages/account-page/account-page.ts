@@ -1,95 +1,77 @@
-import { Component, OnInit } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { WalletTable } from '../../components/wallet-table/wallet-table';
-import { WalletService } from '../../services/wallet-service';
-import { Button } from 'primeng/button';
-import { DialogService, DynamicDialogRef, DynamicDialogModule } from 'primeng/dynamicdialog';
-import { WalletEditDialog } from '../../dialogs/add/wallet-edit/wallet-edit.dialog';
-import { Wallet } from '../../store/wallet-api';
-import { MessageService } from 'primeng/api';
+
+
+import { Component, ChangeDetectionStrategy, OnInit} from '@angular/core';
+import { DialogService } from 'primeng/dynamicdialog';
+import { AccountService } from '../../services/account-service';
+import { Account } from '../../store/account-api';
+import { AccountTable } from '../../components/account-table/account-table';
+
+import { AccountEditDialog } from '../../dialogs/add/account-edit/account-edit.dialog';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-wallet-page',
-  standalone: true,
-  imports: [TableModule, WalletTable, Button, DynamicDialogModule],
+  selector: 'app-account-page',
+  imports: [
+    ButtonModule,
+    AsyncPipe,AccountTable, CommonModule
+  ],
   templateUrl: './account-page.html',
   styleUrl: './account-page.css',
-  providers: [DialogService]
-})
-export class WalletPage implements OnInit {
+  changeDetection: ChangeDetectionStrategy.OnPush,
+}) 
+export class AccountPage implements OnInit {
 
-  walletList: Wallet[] = [];
-  ref: DynamicDialogRef | undefined;
+  accountList$!: Observable<Account[]>;
 
   constructor(
-    private walletService: WalletService,
-    private dialogService: DialogService,
-    private messageService: MessageService
+    private accountService: AccountService,
+    private dialogService: DialogService
   ) {}
 
-  ngOnInit() {
-    this.walletList = this.walletService.getWalletList;
+  ngOnInit(): void {
+    this.loadAccounts();
   }
 
-  onStartAddAction(event?: any) {
-    const data = {
-      header: 'Agregar Wallet',
-      closable: true,
-      height: '40dvh',
-      width: '50dvh'
-    };
-    this.ref = this.dialogService.open(WalletEditDialog, data);
-    this.ref.onClose.subscribe((result: any) => {
-        this.walletList.push(result);
-      
+
+  loadAccounts() {
+    this.accountList$ = this.accountService.getAll();
+  }
+
+  onStartAddAction(event: Event) {
+    event.stopPropagation();
+    const ref = this.dialogService.open(AccountEditDialog, {
+      header: 'Nueva cuenta',
+      width: '400px'
+    });
+
+    ref.onClose.subscribe(result => {
+      if (result) {
+        this.accountService.create(result).subscribe(() => this.loadAccounts());
+      }
     });
   }
 
-  onListAction(event: { type: string; value: Wallet }) {
-    switch (event.type) {
-      case 'edit':
-        this.onEdit(event.value);
-        break;
-      case 'delete':
-        this.onDelete(event.value);
-        break;
-      default:
-        break;
-    }
-  }
+  onListAction(event: { type: string; value: Account }) {
+    if (event.type === 'edit') {
+      const ref = this.dialogService.open(AccountEditDialog, {
+        header: 'Editar cuenta',
+        width: '400px',
+        data: { account: event.value }
+      });
 
-  onEdit(value?: Wallet) {
-    const data = {
-      data: 
-      { wallet: value },
-      header: 'Editar Wallet',
-      closable: true,
-      height: '40dvh',
-      width: '50dvh'
-    };
-    this.dialogService.open(WalletEditDialog, data)
-      .onClose
-      .subscribe((result: any) => {
-        const newWalletList = this.walletService.getWalletList;
-        const newWallet = newWalletList.find(w => w.id === result.id);
-        if (newWallet) {
-          newWallet.id = result.id;
-          newWallet.customerId = result.customerId;
-          newWallet.money = result.money;
+      ref.onClose.subscribe(result => {
+        if (result) {
+          this.accountService.update(result).subscribe(() => this.loadAccounts());
         }
       });
-  }
 
-  onDelete(wallet: Wallet) {
-    const idx = this.walletList.findIndex(w => w.id === wallet.id);
-    if (idx > -1) {
-      this.walletList.splice(idx, 1);
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Wallet eliminada',
-        detail: `ID ${wallet.id}`
-      });
+    } else if (event.type === 'delete') {
+      if (confirm('¿Seguro que deseas eliminar esta cuenta?')) {
+        this.accountService.delete(event.value.id!).subscribe(() => this.loadAccounts());
+      }
     }
   }
 }
-

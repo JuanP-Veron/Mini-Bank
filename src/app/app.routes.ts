@@ -17,11 +17,15 @@ export const routes: Routes = [
         },
         {
           path: 'cuentas',
-          loadComponent: () => import('../app/mods/account/pages/account-page/account-page').then((m) => m.WalletPage)
+          loadComponent: () => import('../app/mods/account/pages/account-page/account-page').then((m) => m.AccountPage)
         },
         {
           path: 'bancos',
           loadComponent: () => import('../app/mods/banks/pages/bank-page/bank-page').then((m) => m.BankPage)
+        },
+        {
+          path: 'trasferencias',
+          loadComponent: () => import('../app/mods/transfer/page/transfer-page/transfer-page').then((m) => m.TransferPage)
         },
       ]
     },

@@ -1,0 +1,45 @@
+<form [formGroup]="form" class="p-fluid" style="padding: 1rem; max-width: 600px;">
+  <div class="p-field">
+    <label for="originAccountId">Cuenta Origen*</label>
+    <input id="originAccountId" pInputText type="number" formControlName="originAccountId" />
+  </div>
+
+  <div class="p-field">
+    <label for="transferType">Tipo de Transferencia*</label>
+    <input id="transferType" pInputText type="number" formControlName="transferType" />
+  </div>
+
+  <div class="p-field">
+    <label for="denstinationBankId">Banco Destino*</label>
+    <input id="denstinationBankId" pInputText type="number" formControlName="denstinationBankId" />
+  </div>
+
+  <div class="p-field">
+    <label for="accountNumber">Número de Cuenta*</label>
+    <input id="accountNumber" pInputText formControlName="accountNumber" />
+  </div>
+
+  <div class="p-field">
+    <label for="documentNumber">Documento*</label>
+    <input id="documentNumber" pInputText formControlName="documentNumber" />
+  </div>
+
+  <div class="p-field">
+    <label for="currencyId">Moneda*</label>
+    <input id="currencyId" pInputText type="number" formControlName="currencyId" />
+  </div>
+
+  <div class="p-field">
+    <label for="amount">Monto*</label>
+    <input id="amount" pInputText type="number" formControlName="amount" />
+  </div>
+
+  <div class="p-field">
+    <label for="concept">Concepto*</label>
+    <input id="concept" pInputText formControlName="concept" />
+  </div>
+
+  <div style="text-align: right; margin-top: 1.5rem;">
+    <p-button label="Enviar" (click)="save()" styleClass="p-button-success"></p-button>
+  </div>
+</form>

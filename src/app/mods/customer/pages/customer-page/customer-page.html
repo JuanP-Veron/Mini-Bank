@@ -1,19 +1,20 @@
-<!-- contenedor superior: título + botón -->
 <div style="display: flex; justify-content: space-between; width: 100%">
   <h1>Clientes</h1>
-  
-  <!-- botón para agregar un nuevo cliente -->
   <p-button 
     icon="pi pi-plus" 
     label="Agregar"
     styleClass="p-button-outlined p-button-plain"
+    [disabled]="(loading$ | async)"
     (click)="onStartAddAction($event)">
   </p-button>
 </div>
 <br>
 
-<!-- tabla de clientes con sus eventos personalizados -->
+<p-progressSpinner *ngIf="loading$ | async"></p-progressSpinner>
+
 <app-customer-table 
-  [list]="customerList" 
-  (action)="onListAction($event)"> 
+  *ngIf="!(loading$ | async)"
+  [list]="(customers$ | async) || []" 
+  (action)="onListAction($event)">
 </app-customer-table>
+

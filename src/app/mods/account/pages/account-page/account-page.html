@@ -1,5 +1,7 @@
+
+
 <div style="display: flex; justify-content: space-between; width: 100%">
-  <h1>Wallets</h1>
+  <h1>Cuentas</h1>
   <p-button 
     icon="pi pi-plus" 
     label="Agregar"
@@ -7,9 +9,12 @@
     (click)="onStartAddAction($event)">
   </p-button>
 </div>
+
 <br>
 
-<app-wallet-table 
-  [list]="walletList" 
-  (action)="onListAction($event)">
-</app-wallet-table>
+<ng-container *ngIf="accountList$ | async as accountList">
+  <app-account-table 
+    [list]="accountList" 
+    (action)="onListAction($event)">
+  </app-account-table>
+</ng-container>

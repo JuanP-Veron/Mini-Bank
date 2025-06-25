@@ -1,0 +1,35 @@
+<p-table 
+  [value]="list" 
+  [tableStyle]="{ 'min-width': '50rem' }">
+  
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Titular</th>
+      <th>Cliente</th>
+      <th>Saldo</th>
+      <th style="text-align: center;">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body">
+    <tr *ngFor="let account of list; trackBy: trackById">
+      <td>{{ account.id }}</td>
+      <td>{{ account.holder }}</td>
+      <td>{{ account.customerId }}</td>
+      <td>{{ account.balance | currency:'PYG':'symbol':'1.0-0' }}</td>
+      <td style="text-align: center;">
+        <p-button 
+          icon="pi pi-pencil" 
+          styleClass="p-button-text" 
+          (click)="onEdit(account, $event)">
+        </p-button>
+        <p-button 
+          icon="pi pi-trash" 
+          styleClass="p-button-text" 
+          (click)="onDelete(account, $event)">
+        </p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

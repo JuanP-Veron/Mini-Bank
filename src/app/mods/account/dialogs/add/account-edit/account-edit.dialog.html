@@ -1,0 +1,23 @@
+<div style="display: flex; flex-direction: column; gap: 1rem; height: 100%">
+  <label>Titular</label>
+  <input pInputText [(ngModel)]="holder" placeholder="Titular" />
+
+  <label>Número de cuenta</label>
+  <input pInputText [(ngModel)]="number" placeholder="Número de cuenta" />
+
+  <label>Tipo</label>
+  <select [(ngModel)]="type">
+    <option [value]="0">Ahorro</option>
+    <option [value]="1">Corriente</option>
+  </select>
+
+  <label>Moneda (currencyId)</label>
+  <input pInputText [(ngModel)]="currencyId" type="number" />
+
+  <label>ID del Cliente</label>
+  <input pInputText [(ngModel)]="customerId" type="number" />
+
+  <div style="margin-top: auto;">
+    <p-button label="Guardar" (click)="save()"></p-button>
+  </div>
+</div>

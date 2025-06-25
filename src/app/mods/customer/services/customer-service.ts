@@ -1,42 +1,37 @@
-import {inject, Injectable} from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { AppApiService } from "../../../shared/services/app-api.service";
+import { Observable } from "rxjs";
+import { Customer } from "../store/customer-api";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
+  private url = 'http://54.173.20.225:8080/api/Customer';
 
-
-  private http = inject(HttpClient);
-
-
-  url = 'http://54.173.20.225:8080/api/Customer';
+  constructor(private api: AppApiService) {}
 
   addCustomer(data: any) {
-    return this.http.post(this.url, data).pipe(
-      catchError(this.handleError)
-    )
+    return this.api.post(`${this.url}`, data);
   }
 
+  updateCustomer(data: any) {
+    return this.api.put(`${this.url}`, data);
+  }
 
   deleteCustomer(id: number) {
-  return this.http.delete(`${this.url}/${id}`).pipe(
-    catchError(this.handleError)
-  );
-}
-
-
-
-  listCustomer() {
-    return this.http.get(this.url + '/all').pipe(
-       catchError(this.handleError)
-    )
+    return this.api.delete(`${this.url}/${id}`);
   }
 
+  listCustomer(): Observable<Customer[]>{
+    return this.api.get<Customer[]>(`${this.url}/all`);
+  }
 
-    private handleError(err: HttpErrorResponse) {
-      // Centraliza lógica de error (toast, log, etc.)
-      return throwError(() => err);
-    }
+  getCustomerById(id: number): Observable<Customer> {
+    return this.api.get<Customer>(`${this.url}/${id}`);
+  }
+
+  listFiltered(params: any) {
+    return this.api.post(`${this.url}/filtered`, params);
+  }
 }

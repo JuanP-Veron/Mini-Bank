@@ -1,0 +1,54 @@
+
+<!-- 
+  two-way binding [(ngModel)]:
+  (El two-way binding es una característica de Angular que sincroniza automáticamente
+  los datos entre el componente y la vista en ambas direcciones:
+  1. Cuando el usuario escribe en el campo, actualiza la variable en el componente.
+  2. Cuando la variable cambia en el componente, actualiza el valor mostrado en el input.
+  Esto se logra con la sintaxis [()] conocida como "banana in a box")
+-->
+<form [formGroup]="customerForm" class="p-fluid" style="padding: 1rem; max-width: 600px;">
+  <div class="p-field">
+    <label for="name">Nombre*</label>
+    <input id="name" pInputText formControlName="name" />
+  </div>
+
+  <div class="p-field">
+    <label for="lastname">Apellido*</label>
+    <input id="lastname" pInputText formControlName="lastname" />
+  </div>
+
+  <div class="p-field">
+    <label for="documentNumber">Documento*</label>
+    <input id="documentNumber" pInputText formControlName="documentNumber" />
+  </div>
+
+  <div class="p-field">
+    <label for="mail">Correo electrónico</label>
+    <input id="mail" type="email" pInputText formControlName="mail" />
+  </div>
+
+  <div class="p-field">
+    <label for="phone">Teléfono*</label>
+    <input id="phone" pInputText formControlName="phone" />
+  </div>
+
+  <div class="p-field">
+    <label for="address">Dirección*</label>
+    <input id="address" pInputText formControlName="address" />
+  </div>
+
+  <div class="p-field">
+    <label for="birth">Nacimiento*</label>
+    <input id="birth" type="date" pInputText formControlName="birth" />
+  </div>
+
+  <div class="p-field">
+    <label for="bank">Banco*</label>
+    <p-dropdown inputId="bank" [options]="banks" optionLabel="name" optionValue="id" formControlName="bankId" />
+  </div>
+
+  <div style="text-align: right; margin-top: 1.5rem;">
+    <p-button label="Actualizar" (click)="save()" styleClass="p-button-success"></p-button>
+  </div>
+</form>

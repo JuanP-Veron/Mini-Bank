@@ -1,0 +1,25 @@
+<p-table [value]="transactions" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Fecha</th>
+      <th>Cuenta Origen</th>
+      <th>Cuenta Destino</th>
+      <th>Monto</th>
+      <th>Concepto</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-tx>
+    <tr>
+      <td>{{ tx.date | date: 'short' }}</td>
+      <td>{{ tx.originAccount }}</td>
+      <td>{{ tx.destinationAccount }}</td>
+      <td>{{ tx.amount | currency: 'PYG':'symbol' }}</td>
+      <td>{{ tx.concept }}</td>
+      <td>
+        <button pButton icon="pi pi-eye" class="p-button-sm p-button-info"
+                (click)="action.emit({ type: 'view', value: tx })"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
