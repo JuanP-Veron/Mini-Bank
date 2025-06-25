@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+/*import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Account } from '../store/account-api';
 import { Observable } from 'rxjs';
+import { AppApiService } from '../../../shared/services/app-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +10,9 @@ import { Observable } from 'rxjs';
 export class AccountService {
   private apiUrl = '/api/Account';
 
-  constructor(private http: HttpClient) {}
+  constructor(private api: AppApiService) {}
 
-  getAll(): Observable<Account[]> {
-    return this.http.get<Account[]>(`${this.apiUrl}/all`);
-  }
+
 
   getFiltered(): Observable<Account[]> {
     return this.http.get<Account[]>(`${this.apiUrl}/filtered`);
@@ -34,4 +33,4 @@ export class AccountService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-}
+}*/

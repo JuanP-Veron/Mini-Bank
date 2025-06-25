@@ -1,22 +1,21 @@
-
 export interface Account {
   id?: number;
-  holder: string;
-  number: string;
+  holder: string,
+  number: string,
   type: number;
   currencyId: number;
   customerId: number;
-  balance?: number;
-  status?: number;
-
-  createSavingAccount?: {
+  createSavingAccount: CreateSavingAccount;
+  createCurrentAccount: CreateCurrentAccount;
+}
+export interface CreateSavingAccount {
     savingType: number;
-  };
+  }
 
-  createCurrentAccount?: {
-    operationalLimit: number;
-    monthAverage: number;
-    interest: number;
-  };
+export interface CreateCurrentAccount {
+    operationalLimit: string | number;
+    monthAverage: string | number;
+    interest: string | number;  
+
 }
   

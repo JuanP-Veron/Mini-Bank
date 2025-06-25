@@ -11,19 +11,19 @@ export class CustomerService {
 
   constructor(private api: AppApiService) {}
 
-  addCustomer(data: any) {
-    return this.api.post(`${this.url}`, data);
+  addCustomer(data: Customer): Observable<Customer> {
+    return this.api.post<Customer>(`${this.url}`, data);
   }
 
-  updateCustomer(data: any) {
-    return this.api.put(`${this.url}`, data);
+  updateCustomer(data: Customer): Observable<Customer> {
+    return this.api.put<Customer>(`${this.url}`, data);
   }
 
-  deleteCustomer(id: number) {
-    return this.api.delete(`${this.url}/${id}`);
+  deleteCustomer(id: number): Observable<void> {
+    return this.api.delete<void>(`${this.url}/${id}`);
   }
 
-  listCustomer(): Observable<Customer[]>{
+  listCustomer(): Observable<Customer[]> {
     return this.api.get<Customer[]>(`${this.url}/all`);
   }
 
@@ -31,7 +31,7 @@ export class CustomerService {
     return this.api.get<Customer>(`${this.url}/${id}`);
   }
 
-  listFiltered(params: any) {
-    return this.api.post(`${this.url}/filtered`, params);
+  listFiltered(params: any): Observable<Customer[]> {
+    return this.api.post<Customer[]>(`${this.url}/filtered`, params);
   }
 }

@@ -1,100 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-import {InputText} from 'primeng/inputtext';
-import {Button} from 'primeng/button';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
-import { Customer} from '../../../store/customer-api';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import { InputText } from 'primeng/inputtext';
+import { Button } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CustomerService } from '../../../services/customer-service';
-import { MessageService } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BankService } from '../../../../banks/services/bank.service';
-import { BankEntity } from '../../../../banks/store/bank.api';
 import { DropdownModule } from 'primeng/dropdown';
-
-import { CommonModule } from '@angular/common'; // si usás standalone
+import { CommonModule } from '@angular/common';
+import { Customer } from '../../../store/customer-api';
+import { BankEntity } from '../../../../banks/store/bank.api';
 
 @Component({
-  selector: 'app-customer-add',
+  selector: 'app-customer-edit',
+  standalone: true,
   imports: [
     InputText,
     Button,
-    FormsModule,DropdownModule,ReactiveFormsModule,CommonModule
+    FormsModule,
+    DropdownModule,
+    CommonModule
   ],
   templateUrl: './customer-edit.dialog.html',
   styleUrl: './customer-edit.dialog.css'
 })
-
 export class CustomerEditDialog implements OnInit {
-  customerForm: FormGroup;
+  model: Customer = {
+    name: '',
+    lastname: '',
+    documentNumber: '',
+    address: '',
+    mail: '',
+    phone: '',
+    customerStatus: 0,
+    birth: '',
+    bankId: 0
+  };
   banks: BankEntity[] = [];
-  customerId!: number;
 
   constructor(
-    private fb: FormBuilder,
     private ref: DynamicDialogRef,
     private config: DynamicDialogConfig,
     private customerService: CustomerService,
-    private bankService: BankService,
-    private messageService: MessageService
-  ) {
-    this.customerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      lastname: ['', [Validators.required, Validators.minLength(2)]],
-      documentNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      address: ['', Validators.required],
-      mail: ['', Validators.email],
-      phone: ['', Validators.required],
-      customerStatus: [0],
-      birth: ['', Validators.required],
-      bankId: [0, Validators.min(1)]
-    });
-  }
+    private bankService: BankService
+  ) {}
 
   ngOnInit(): void {
     this.loadBanks();
-
-    const customer: Customer = this.config.data?.customer;
-    if (customer) {
-      this.customerId = customer.id!;
-      this.customerForm.patchValue(customer);
+    
+    if (this.config.data?.customer) {
+      this.model = { ...this.config.data.customer, bankId: this.config.data.customer.bank.id };
     }
   }
 
   save(): void {
-    if (this.customerForm.invalid) {
-      this.markAllAsTouched();
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Formulario inválido',
-        detail: 'Complete los campos obligatorios correctamente'
-      });
-      return;
-    }
-
-    const updatedCustomer = { ...this.customerForm.value, id: this.customerId };
-
-    this.customerService.updateCustomer(updatedCustomer).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Actualizado',
-          detail: 'Cliente actualizado correctamente'
-        });
-        this.ref.close({ success: true });
-      },
-      error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo actualizar el cliente: ' + (err.error?.message || 'Error desconocido')
-        });
-        console.error(err);
-      }
+    this.customerService.updateCustomer(this.model).subscribe({
+      next: () => this.ref.close({ success: true }),
+      error: (err) => console.error('Error al actualizar cliente', err)
     });
-  }
-
-  private markAllAsTouched(): void {
-    Object.values(this.customerForm.controls).forEach(control => control.markAsTouched());
   }
 
   private loadBanks(): void {
