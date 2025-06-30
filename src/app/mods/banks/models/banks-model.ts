@@ -6,7 +6,4 @@ export interface BankEntity {
   address?: string;
 }
 
-export interface BankAddResult {
-
-}
 

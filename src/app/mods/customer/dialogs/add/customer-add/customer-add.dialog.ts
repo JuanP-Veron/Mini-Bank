@@ -1,123 +1,85 @@
 import { Component, OnInit } from '@angular/core';
-import {InputText} from 'primeng/inputtext';
-import {Button} from 'primeng/button';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
-import { Customer} from '../../../store/customer-api';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import { CustomerService } from '../../../services/customer-service';
-import { MessageService } from 'primeng/api';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BankService } from '../../../../banks/services/bank.service';
-import { BankEntity } from '../../../../banks/store/bank.api';
-import { DropdownModule } from 'primeng/dropdown';
+import { FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
+import {  DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
-import { CommonModule } from '@angular/common'; // si usás standalone
+import { Customer } from '../../../models/customer-model';
+import { BankEntity } from '../../../../banks/models/banks-model';
+import { AppService } from '../../../../../core/services/appService';
+import { PRIMENG_MODULES } from '../../../../../shared/primeng-modules';
+import { UiService } from '../../../../../core/services/UI/ui.service';
 
 @Component({
   selector: 'app-customer-add',
+  standalone: true,
   imports: [
-    InputText,
-    Button,
-    FormsModule,DropdownModule,ReactiveFormsModule,CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PRIMENG_MODULES
   ],
   templateUrl: './customer-add.dialog.html',
   styleUrl: './customer-add.dialog.css'
 })
-export class CustomerAddDialog implements OnInit{
-
+export class CustomerAddDialog implements OnInit {
   banks: BankEntity[] = [];
+  customerForm: FormGroup;
 
-model : Customer = {
-  name: '',
-  lastname: '',
-  documentNumber:'',
-  address:'',
-  mail:'',
-  phone:'',
-  customerStatus: 0,
-  birth: '',
-  bankId: 0,
-}
-
- customerForm: FormGroup;
-
-constructor(private dialogRef: DynamicDialogRef<CustomerAddDialog>,
-            private dialogConfig: DynamicDialogConfig,
-          private custormerService: CustomerService,
-          private bankService: BankService,
-          private messageService: MessageService,
-          private fb: FormBuilder) {
-
-
- this.customerForm = this.fb.group({
+  constructor(
+    private dialogRef: DynamicDialogRef,
+    private appService: AppService,
+    private fb: NonNullableFormBuilder,
+    private uiService: UiService
+  ) {
+    this.customerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       lastname: ['', [Validators.required, Validators.minLength(2)]],
       documentNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      address: ['',[Validators.required]],
+      address: ['', [Validators.required]],
       mail: ['', [Validators.email]],
       phone: ['', [Validators.required]],
       customerStatus: [0],
-      birth: ['',[Validators.required]],
-      bankId: [0, [Validators.min(0)]]
+      birth: ['', [Validators.required]],
+      bankId: [0, [Validators.min(1)]],
     });
+  }
 
-}
-
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadBanks();
   }
 
-  save() {
+  save(): void {
     if (this.customerForm.invalid) {
       this.markAllAsTouched();
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Formulario inválido',
-        detail: 'Por favor complete todos los campos requeridos correctamente'
-      });
+      this.uiService.showWarn('Formulario inválido', 'Por favor complete todos los campos requeridos correctamente');
       return;
     }
 
-    this.custormerService.addCustomer(this.customerForm.value).subscribe({
+    const newCustomer: Customer = this.customerForm.value;
+
+    this.appService.customerApiService.addCustomer(newCustomer).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Cliente guardado correctamente'
-        });
-        this.dialogRef.close({ success: true, value: this.customerForm.value });
+        this.uiService.showSuccess('Éxito', 'Cliente guardado correctamente');
+        this.dialogRef.close({ success: true, value: newCustomer });
       },
       error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo guardar el cliente: ' + (err.error?.message || '')
-        });
+        this.uiService.showError('Error', 'No se pudo guardar el cliente: ' + (err.error?.message || ''));
         console.error(err);
-      },
-    });
-  }
-
-
-    private markAllAsTouched() {
-    Object.values(this.customerForm.controls).forEach(control => {
-      control.markAsTouched();
-    });
-  }
-
-
-
-    loadBanks() {
-    this.bankService.listBanks().subscribe({
-      next: (data: any) => {
-        this.banks = data;
-      },
-      error: (err) => {
-        console.error('Error cargando bancos', err);
       }
     });
+  }
 
-}
+  private markAllAsTouched(): void {
+    Object.values(this.customerForm.controls).forEach(control => {
+      control.markAsTouched({ onlySelf: true });
+    });
+  }
 
+  private loadBanks(): void {
+    this.appService.bankApiService.listBanks().subscribe({
+      next: (data: any) => this.banks = data,
+      error: (err) => console.error('Error al cargar bancos', err)
+    });
+  }
 }

@@ -25,10 +25,10 @@ import { AppSecurityService } from '../../../services/security/app-security.serv
     ToastModule
   ],
   providers: [MessageService],
-  templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.css'
+  templateUrl: './login-page.html',
+  styleUrl: './login-page.css'
 })
-export class LoginPageComponent {
+export class LoginPage {
   username = '';
   password = '';
 

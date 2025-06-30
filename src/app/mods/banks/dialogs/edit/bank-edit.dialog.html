@@ -1,17 +1,28 @@
-<div style="display: flex; flex-direction: column; gap: 1rem; height: 100%">
-  <label> Nombre </label>
-  <input pInputText [(ngModel)]="name" placeholder="nombre"/>
+<div class="form-container">
+  <h2>Editar Banco</h2>
 
-  <label> Documento </label>
-  <input pInputText [(ngModel)]="document" placeholder="documento"/>
-
-  <div style="margin-top: auto;">
-    <p-button label="Guardar" (click)="save()" ></p-button>
+  <div class="field">
+    <label>Nombre</label>
+    <input pInputText [(ngModel)]="model.name" />
   </div>
 
+  <div class="field">
+    <label>Teléfono</label>
+    <input pInputText [(ngModel)]="model.phone" />
+  </div>
+
+  <div class="field">
+    <label>Correo</label>
+    <input pInputText [(ngModel)]="model.mail" />
+  </div>
+
+  <div class="field">
+    <label>Dirección</label>
+    <input pInputText [(ngModel)]="model.address" />
+  </div>
+
+  <button pButton type="button" label="Guardar" (click)="save()"></button>
 </div>
-
-
 
 
 <!--

@@ -36,7 +36,7 @@ export class HomePortal {
     {label: 'Clientes', icon: 'pi pi-users', routerLink: ['/home/clientes']},
     {label: 'Cuentas', icon: 'pi pi-wallet', routerLink: ['/home/cuentas']},
     {label: 'banco', icon: 'pi pi-building-columns', routerLink: ['/home/bancos']},
-    {label: 'Transferencias', icon: 'pi pi-arrow-right-arrow-left', routerLink: ['/home/trasferencias']}
+   /* {label: 'Transferencias', icon: 'pi pi-arrow-right-arrow-left', routerLink: ['/home/trasferencias']}*/
   ]
 
   userMenuItems: MenuItem[] = [

@@ -1,134 +1,131 @@
-import { Component, OnInit,NgModule } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { CustomerTableComponent } from '../../components/customer-table/customer-table.component';
-import { Button } from 'primeng/button';
-import { DialogService, DynamicDialogRef, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ConfirmationService } from 'primeng/api';
+
+import { Customer } from '../../models/customer-model';
+import { AppService } from '../../../../core/services/appService';
 import { CustomerAddDialog } from '../../dialogs/add/customer-add/customer-add.dialog';
 import { CustomerEditDialog } from '../../dialogs/edit/customer-edit/customer-edit.dialog';
-import { MessageService } from 'primeng/api';
-import { ConfirmationService } from 'primeng/api';
-import { CustomerFacade } from '../../facade/customer.facade';
-import { AsyncPipe } from '@angular/common';
-import { Customer } from '../../store/customer-api';
-import { Observable } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { CustomerTable } from '../../components/customer-table/customer-table';
+import { UiService } from '../../../../core/services/UI/ui.service';
+import { PRIMENG_MODULES } from '../../../../shared/primeng-modules';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
-import { ListEvent } from '../../../../shared/utils'
 
 @Component({
   selector: 'app-customer-page',
-  standalone: true,
-  imports: [TableModule, CustomerTableComponent, Button, DynamicDialogModule, AsyncPipe , CommonModule,ProgressSpinnerModule],
+    imports: [AsyncPipe,PRIMENG_MODULES, CustomerTable, CommonModule,ProgressSpinnerModule],
   templateUrl: './customer-page.html',
   styleUrl: './customer-page.css',
-  providers: [DialogService],
 })
-export class CustomerPage implements OnInit {
+export class CustomerPage implements OnInit, OnDestroy {
+  customers$ = new BehaviorSubject<Customer[]>([]);
+  loading$: Observable<boolean>;
 
-  // Propiedades primero (importante el orden)
+  private destroy$ = new Subject<void>();
+  private ref: DynamicDialogRef | null = null;
   
-  ref: DynamicDialogRef | undefined;
-  customers$!: Observable<Customer[]>;
-  loading$!: Observable<boolean>;
-
   constructor(
-    private customerFacade: CustomerFacade,
+    private appService: AppService,
     private dialogService: DialogService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private uiService: UiService
   ) {
-        this.customers$ = this.customerFacade.customers$;
-    this.loading$ = this.customerFacade.loading$;
+    
+  this.loading$ = this.uiService.loading$;
   }
-
-  ngOnInit() {
-    this.loadEntities();
-  }
-
   
-onListAction(event: ListEvent) {
-  switch (event.type) {
-    case 'selected':
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Cliente seleccionado',
-        detail: `Seleccionaste: ${event.value.name}`
-      });
-      break;
-    case 'edit':
-      this.onEdit(event.value);
-      break;
-    case 'delete':
-      this.onDelete(event.value);
-      break;
-    default:
-      console.warn('Tipo de acción no reconocido:', event.type);
-      break;
+
+  ngOnInit(): void {
+    this.loadCustomers();
   }
-}
-  // ... (resto de métodos se mantienen igual)
-  onStartAddAction(event?: any) {
-    const data = {
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.ref?.close();
+  }
+
+  private loadCustomers(): void {
+    this.uiService.setLoading(true);
+    this.appService.customerApiService.listCustomer()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (customers) => this.customers$.next(customers),
+        error: (err) => {
+          this.uiService.showError('Error al cargar clientes', err.error?.message || 'No se pudo obtener la lista');
+        },
+        complete: () => this.uiService.setLoading(false),
+      });
+  }
+
+  onStartAddAction(): void {
+    this.ref = this.dialogService.open(CustomerAddDialog, {
       header: 'Agregar Cliente',
       closable: true,
-      height: '100dvh',
+      height: '80dvh',
       width: '70dvh',
-    };
-    this.ref = this.dialogService.open(CustomerAddDialog, data);
-    this.ref.onClose.subscribe((result: any) => {
-      if (result?.success) {
-        this.loadEntities();
-      }
+    });
+
+    this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
+      if (result?.success) this.loadCustomers();
+      this.ref = null;
     });
   }
-
 
   onEdit(customer: Customer): void {
     this.ref = this.dialogService.open(CustomerEditDialog, {
       data: { customer },
       header: 'Editar Cliente',
       closable: true,
-      width: '50vw',
+      height: '90dvh',
+      width: '70dvh',
     });
-    this.ref.onClose.subscribe((result: any) => {
-      if (result?.success) {
-        this.loadEntities();
-      }
+
+    this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
+      if (result?.success) this.loadCustomers();
+      this.ref = null;
     });
   }
 
-  onDelete(customer: Customer) {
+  onDelete(customer: Customer): void {
     if (!customer?.id) return;
 
     this.confirmationService.confirm({
-      message: `¿Estás seguro de que querés eliminar a ${customer.name}?`,
-      header: 'Confirmar eliminación',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Sí',
-      rejectLabel: 'No',
+      message: `¿Estás seguro de que querés eliminar al cliente <b>${customer.name}</b>? Esta acción no se puede deshacer.`,
+      header: 'Eliminar cliente',
+      icon: 'pi pi-trash',
+      acceptLabel: 'Eliminar',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger custom-confirm-btn',
+      rejectButtonStyleClass: 'p-button-secondary custom-cancel-btn',
       accept: () => {
-        this.customerFacade.delete(customer.id!).subscribe({
-          next: () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Eliminado',
-              detail: `${customer.name} fue eliminado correctamente.`
-            });
-          },
-          error: (err) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error al eliminar',
-              detail: err.error?.message || 'No se pudo eliminar el cliente'
-            });
-          }
-        });
-      }
+        this.uiService.setLoading(true);
+        this.appService.customerApiService.deleteCustomer(customer.id as number)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.uiService.showSuccess('Eliminado', `${customer.name} fue eliminado correctamente.`);
+              this.loadCustomers();
+            },
+            error: (err) =>
+              this.uiService.showError('Error al eliminar', err.error?.message || 'No se pudo eliminar el cliente'),
+            complete: () => this.uiService.setLoading(false),
+          });
+      },
     });
   }
-
-  loadEntities() {
-    this.customerFacade.load();
+  onListAction(event: { type: string; value: Customer }): void {
+    switch (event.type) {
+      case 'edit':
+        this.onEdit(event.value);
+        break;
+      case 'delete':
+        this.onDelete(event.value);
+        break;
+      default:
+        console.warn('Acción no reconocida:', event.type);
+    }
   }
 }

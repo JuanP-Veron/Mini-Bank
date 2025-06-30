@@ -1,20 +1,26 @@
 
 
-<div style="display: flex; justify-content: space-between; width: 100%">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
   <h1>Cuentas</h1>
   <p-button 
     icon="pi pi-plus" 
     label="Agregar"
     styleClass="p-button-outlined p-button-plain"
-    (click)="onStartAddAction($event)">
+    [disabled]="loading$ | async"
+    (click)="onAdd()">
   </p-button>
 </div>
 
-<br>
-
-<ng-container *ngIf="accountList$ | async as accountList">
-  <app-account-table 
-    [list]="accountList" 
-    (action)="onListAction($event)">
-  </app-account-table>
+<ng-container *ngIf="loading$ | async; else tableContent">
+  <div style="display: flex; justify-content: center; align-items: center; height: 50vh">
+    <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+  </div>
 </ng-container>
+
+<ng-template #tableContent>
+  <app-account-table 
+    *ngIf="!(loading$ | async)"
+    [list]="(accountList | async) || []"
+    (action)="handleTableAction($event)">
+  </app-account-table>
+</ng-template>

@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { AppApiService } from "../../../shared/services/app-api.service";
 import { Observable } from "rxjs";
-import { Customer } from "../store/customer-api";
+import { Customer } from "../models/customer-model";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomerService {
+export class CustomerApiService {
   private url = 'http://54.173.20.225:8080/api/Customer';
 
   constructor(private api: AppApiService) {}
@@ -31,7 +31,4 @@ export class CustomerService {
     return this.api.get<Customer>(`${this.url}/${id}`);
   }
 
-  listFiltered(params: any): Observable<Customer[]> {
-    return this.api.post<Customer[]>(`${this.url}/filtered`, params);
-  }
 }

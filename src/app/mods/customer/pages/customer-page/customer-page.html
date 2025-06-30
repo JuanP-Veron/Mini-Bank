@@ -1,20 +1,26 @@
-<div style="display: flex; justify-content: space-between; width: 100%">
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
   <h1>Clientes</h1>
   <p-button 
     icon="pi pi-plus" 
     label="Agregar"
     styleClass="p-button-outlined p-button-plain"
-    [disabled]="(loading$ | async)"
-    (click)="onStartAddAction($event)">
+    [disabled]="loading$ | async"
+    (click)="onStartAddAction()">
   </p-button>
 </div>
-<br>
 
-<p-progressSpinner *ngIf="loading$ | async"></p-progressSpinner>
 
-<app-customer-table 
-  *ngIf="!(loading$ | async)"
-  [list]="(customers$ | async) || []" 
-  (action)="onListAction($event)">
-</app-customer-table>
+<ng-container *ngIf="loading$ | async; else tableContent">
+  <div style="display: flex; justify-content: center; align-items: center; height: 50vh;">
+    <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+  </div>
+</ng-container>
+
+<ng-template #tableContent>
+  <app-customer-table 
+    [list]="(customers$ | async) || []" 
+    (action)="onListAction($event)">
+  </app-customer-table>
+</ng-template>
 

@@ -1,19 +1,37 @@
-<div style="display: flex; flex-direction: column; gap: 1rem; height: 100%">
-  <label> Nombre </label>
-  <input pInputText [(ngModel)]="model!.name" placeholder="nombre"  required />
-
-  <label> Teléfono </label>
-  <input pInputText [(ngModel)]="model!.phone" placeholder="documento"  required />
-
-  <label> Correo electrónico </label>
-  <input pInputText [(ngModel)]="model!.mail" placeholder="correo electrónico"  required />
-
-  <label> Dirección </label>
-  <input pInputText [(ngModel)]="model!.address" placeholder="dirección"  required />
-
-  <div style="margin-top: auto;">
-    <p-button label="Guardar" (click)="save()" ></p-button>
+<form [formGroup]="bankForm" class="p-fluid" style="padding: 1rem; min-width: 400px; max-width: 600px">
+  <div class="p-field">
+    <label for="name">Nombre*</label>
+    <input id="name" type="text" pInputText formControlName="name" />
+    <small class="p-error" *ngIf="bankForm.get('name')?.invalid && bankForm.get('name')?.touched">
+      Campo obligatorio
+    </small>
   </div>
 
-</div>
+  <div class="p-field">
+    <label for="phone">Teléfono*</label>
+    <input id="phone" type="text" pInputText formControlName="phone" />
+    <small class="p-error" *ngIf="bankForm.get('phone')?.invalid && bankForm.get('phone')?.touched">
+      Campo obligatorio
+    </small>
+  </div>
 
+  <div class="p-field">
+    <label for="mail">Correo electrónico</label>
+    <input id="mail" type="email" pInputText formControlName="mail" />
+    <small class="p-error" *ngIf="bankForm.get('mail')?.invalid && bankForm.get('mail')?.touched">
+      Correo no válido
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="address">Dirección*</label>
+    <input id="address" type="text" pInputText formControlName="address" />
+    <small class="p-error" *ngIf="bankForm.get('address')?.invalid && bankForm.get('address')?.touched">
+      Campo obligatorio
+    </small>
+  </div>
+
+  <div style="text-align: right; margin-top: 1.5rem;">
+    <p-button label="Guardar" (click)="save()" styleClass="p-button-success"></p-button>
+  </div>
+</form>

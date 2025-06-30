@@ -1,61 +1,86 @@
-
-<!-- 
-  two-way binding [(ngModel)]:
-  (El two-way binding es una característica de Angular que sincroniza automáticamente
-  los datos entre el componente y la vista en ambas direcciones:
-  1. Cuando el usuario escribe en el campo, actualiza la variable en el componente.
-  2. Cuando la variable cambia en el componente, actualiza el valor mostrado en el input.
-  Esto se logra con la sintaxis [()] conocida como "banana in a box")
--->
-
-<!-- contenedor principal -->
 <form [formGroup]="customerForm" class="p-fluid" style="padding: 1rem; min-width: 400px; max-width: 600px">
   <div class="p-field">
     <label for="name">Nombre*</label>
-    <input id="name" pInputText formControlName="name" />
+    <input id="name" type="text" pInputText formControlName="name" />
+    <small class="p-error" *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched">
+      Campo obligatorio
+    </small>
   </div>
 
   <div class="p-field">
     <label for="lastname">Apellido*</label>
-    <input id="lastname" pInputText formControlName="lastname" />
+    <input id="lastname" type="text" pInputText formControlName="lastname" />
+    <small class="p-error" *ngIf="customerForm.get('lastname')?.invalid && customerForm.get('lastname')?.touched">
+      Campo obligatorio
+    </small>
   </div>
 
   <div class="p-field">
     <label for="documentNumber">Documento*</label>
-    <input id="documentNumber" pInputText formControlName="documentNumber" />
+    <input id="documentNumber" type="text" pInputText formControlName="documentNumber" />
+    <small class="p-error" *ngIf="customerForm.get('documentNumber')?.invalid && customerForm.get('documentNumber')?.touched">
+      Solo números permitidos
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="address">Dirección*</label>
+    <input id="address" type="text" pInputText formControlName="address" />
+    <small class="p-error" *ngIf="customerForm.get('address')?.invalid && customerForm.get('address')?.touched">
+      Campo obligatorio
+    </small>
   </div>
 
   <div class="p-field">
     <label for="mail">Correo electrónico</label>
-    <input id="mail" pInputText formControlName="mail" type="email" />
+    <input id="mail" type="email" pInputText formControlName="mail" />
+    <small class="p-error" *ngIf="customerForm.get('mail')?.invalid && customerForm.get('mail')?.touched">
+      Correo no válido
+    </small>
   </div>
 
   <div class="p-field">
-    <label for="phone">Teléfono</label>
-    <input id="phone" pInputText formControlName="phone" />
+    <label for="phone">Teléfono*</label>
+    <input id="phone" type="text" pInputText formControlName="phone" />
+    <small class="p-error" *ngIf="customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched">
+      Campo obligatorio
+    </small>
   </div>
-
-  <div class="p-field">
-    <label for="address">Dirección</label>
-    <input id="address" pInputText formControlName="address"  />
-  </div>
-
-  <div class="p-field">
-    <label for="birth">Fecha de nacimiento</label>
-    <input id="birth" pInputText formControlName="birth" type="date" />
-  </div>
-
-  <div class="p-field">
-    <label for="bank">Banco*</label>
-    <p-dropdown
-      inputId="bank"
-      [options]="banks"
-      optionLabel="name"
-      optionValue="id"
-      formControlName="bankId">
-    </p-dropdown>
-    <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
-      <p-button label="Guardar"(click)="save()" styleClass="p-button-success"></p-button>
+  
+    <div class="p-field">
+      <label for="bank">Banco*</label>
+      <p-dropdown
+        inputId="bank"
+        [options]="banks"
+        optionLabel="name"
+        optionValue="id"
+        formControlName="bankId"
+        placeholder="Seleccione un banco">
+      </p-dropdown>
+      <small class="p-error" *ngIf="customerForm.get('bankId')?.invalid && customerForm.get('bankId')?.touched">
+        Debe seleccionar un banco
+      </small>
     </div>
+  
+    <div class="p-field">
+      <label for="customerStatus">Estado del cliente</label>
+      <p-dropdown
+        inputId="customerStatus"
+        [options]="[{label: 'Activo', value: 0}, {label: 'Inactivo', value: 1}]"
+        formControlName="customerStatus"
+        placeholder="Seleccione un estado">
+      </p-dropdown>
+    </div>
+
+  <div class="p-field">
+    <label for="birth">Fecha de nacimiento*</label>
+    <input id="birth" type="date" pInputText formControlName="birth" />
+    <small class="p-error" *ngIf="customerForm.get('birth')?.invalid && customerForm.get('birth')?.touched">
+      Fecha obligatoria
+    </small>
+  </div>
+
+  <div style="text-align: right; margin-top: 1.5rem;">
+    <p-button label="Guardar" (click)="save()" styleClass="p-button-success"></p-button>
   </div>
 </form>

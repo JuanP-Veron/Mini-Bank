@@ -1,0 +1,56 @@
+
+
+  <div class="form-field">
+    <label for="holder">Titular</label>
+    <input id="holder" pInputText [(ngModel)]="model.holder" />
+  </div>
+
+  <div class="form-field">
+    <label for="number">Número de Cuenta</label>
+    <input id="number" pInputText [(ngModel)]="model.number" />
+  </div>
+
+  <div class="form-field">
+    <label for="balance">Balance</label>
+    <input id="balance" type="number" pInputText [(ngModel)]="model.balance" />
+  </div>
+
+  <div class="form-field">
+    <label for="status">Estado</label>
+    <p-dropdown 
+      inputId="status"
+      [options]="[
+        { label: 'Activo', value: 1 },
+        { label: 'Inactivo', value: 0 }
+      ]"
+      [(ngModel)]="model.status"
+      optionLabel="label"
+      optionValue="value">
+    </p-dropdown>
+  </div>
+
+  <div class="form-field">
+    <label for="currencyId">Moneda</label>
+    <p-dropdown 
+      inputId="currencyId"
+      [options]="currencies"
+      optionLabel="name"
+      optionValue="id"
+      [(ngModel)]="model.currencyId">
+    </p-dropdown>
+  </div>
+
+  <div class="form-field">
+    <label for="customerId">Cliente</label>
+    <p-dropdown 
+      inputId="customerId"
+      [options]="customers"
+      optionLabel="name"
+      optionValue="id"
+      [(ngModel)]="model.customerId">
+    </p-dropdown>
+  </div>
+
+  <div class="form-actions">
+    <p-button label="Actualizar" (click)="save()" styleClass="p-button-success"></p-button>
+  </div>

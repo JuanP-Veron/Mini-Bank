@@ -1,121 +1,139 @@
-import {Component, OnInit} from '@angular/core';
-import {TableModule} from 'primeng/table';
-import {BankTableComponent} from '../../components/customer-table/bank-table.component';
-import {Button} from 'primeng/button';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {BankEditDialog} from '../../dialogs/edit/bank-edit.dialog';
-import {ListEvent} from '../../../../shared/utils';
-import {MessageService} from 'primeng/api';
-import {BankAddDialog} from '../../dialogs/add/bank-add.dialog';
-import {BankService} from '../../services/bank.service';
-import {BankEntity} from '../../store/bank.api';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ConfirmationService } from 'primeng/api';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
+import { BankTable } from '../../components/customer-table/bank-table';
+import { BankAddDialog } from '../../dialogs/add/bank-add.dialog';
+import { BankEditDialog } from '../../dialogs/edit/bank-edit.dialog';
+
+import { AppService } from '../../../../core/services/appService';
+import { UiService } from '../../../../core/services/UI/ui.service';
+
+import { BankEntity } from '../../models/banks-model';
+import { PRIMENG_MODULES } from '../../../../shared/primeng-modules';
+import { ListEvent } from '../../../../shared/utils';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-bank-page',
-  imports: [
-    TableModule,
-    BankTableComponent,
-    Button
-  ],
+  imports: [ BankTable, AsyncPipe, PRIMENG_MODULES, CommonModule, ProgressSpinnerModule],
   templateUrl: './bank-page.html',
   styleUrl: './bank-page.css',
 })
-export class BankPage implements OnInit {
+export class BankPage implements OnInit, OnDestroy {
+  banks$ = new BehaviorSubject<BankEntity[]>([]);
+  loading$: Observable<boolean>; 
 
-  // ::: vars
-  //
-  bankList: BankEntity[] = [];
+  private destroy$ = new Subject<void>();
+  private ref: DynamicDialogRef | null = null;
 
-  ref: DynamicDialogRef | undefined;
-
-  // ::: constructor
-  //
-
-  constructor(private dialogService: DialogService,
-              private messageService: MessageService,
-              private bankService: BankService,) {
-
+  constructor(
+    private appService: AppService,
+    private dialogService: DialogService,
+    private confirmationService: ConfirmationService,
+    private uiService: UiService
+  ) {
+      this.loading$ = this.uiService.loading$;
   }
 
-
-  // ::: lifecycle
-  //
-
-  ngOnInit() {
-    this.loadEntities();
-
+  ngOnInit(): void {
+    this.loadBanks();
   }
 
-  // ::: ui listener
-  //
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.ref?.close();
+  }
 
-  onStartAddAction(event?: any) {
-    const data = {
+  private loadBanks(): void {
+    this.uiService.setLoading(true);
+    this.appService.bankApiService.listBanks()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (banks) => this.banks$.next(banks),
+        error: (err) => {
+          this.uiService.showError('Error al cargar bancos', err.error?.message || 'No se pudo obtener la lista');
+        },
+        complete: () => this.uiService.setLoading(false),
+      });
+  }
+
+  onStartAddAction(): void {
+    this.ref = this.dialogService.open(BankAddDialog, {
       header: 'Agregar Banco',
       closable: true,
-      height: '70dvh',
+      height: '50dvh',
       width: '50dvh',
-    }
-    this.ref = this.dialogService.open(BankAddDialog, data);
-this.ref.onClose.subscribe((result: any) => {
-  if (result?.success && result.value) {
-    this.bankList.push(result.value);
-    this.messageService.add({ severity: 'success', summary: 'Banco agregado correctamente' });
-  }
-});
+    });
 
+    this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
+      if (result?.success && result.value) {
+        this.uiService.showSuccess('Agregado', 'Banco agregado correctamente');
+        this.loadBanks();
+      }
+      this.ref = null;
+    });
   }
 
-  onListAction(event: ListEvent) {
+  onEdit(bank: BankEntity): void {
+    this.ref = this.dialogService.open(BankEditDialog, {
+      data: { bank },
+      header: 'Editar Banco',
+      closable: true,
+      height: '40dvh',
+      width: '50dvh',
+    });
+
+    this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
+      if (result?.success) {
+        this.uiService.showSuccess('Actualizado', 'Banco actualizado correctamente');
+        this.loadBanks();
+      }
+      this.ref = null;
+    });
+  }
+
+  onDelete(bank: BankEntity): void {
+    if (!bank?.id) return;
+
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de que querés eliminar el banco <b>${bank.name}</b>? Esta acción no se puede deshacer.`,
+      header: 'Eliminar Banco',
+      icon: 'pi pi-trash',
+      acceptLabel: 'Eliminar',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger custom-confirm-btn',
+      rejectButtonStyleClass: 'p-button-secondary custom-cancel-btn',
+      accept: () => {
+        this.uiService.setLoading(true);
+        this.appService.bankApiService.deleteBank(bank.id as number)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.uiService.showSuccess('Eliminado', `${bank.name} fue eliminado correctamente.`);
+              this.loadBanks();
+            },
+            error: (err) =>
+              this.uiService.showError('Error al eliminar', err.error?.message || 'No se pudo eliminar el banco'),
+            complete: () => this.uiService.setLoading(false),
+          });
+      },
+    });
+  }
+
+  onListAction(event: ListEvent): void {
     switch (event.type) {
-      case 'selected':
-        this.messageService.add(
-          {summary: `El objeto seleccionado \ ${event.value.name}`}
-        )
-        break;
       case 'edit':
-        this.onEdit(event.value)
+        this.onEdit(event.value);
         break;
       case 'delete':
-        break
-      default:
+        this.onDelete(event.value);
         break;
+      default:
+        console.warn('Acción no reconocida:', event.type);
     }
-
   }
-
-
-  onEdit(value?: any) {
-    const data = {
-      data: {
-        customer: value,
-      },
-      header: 'Editar Cliente',
-      closable: true,
-      height: '70dvh',
-      width: '50dvh',
-    }
-    this.dialogService.open(BankEditDialog, data)
-      .onClose
-      .subscribe((result: any) => {
-        // const newCustomerList = this.customerService.getCustomerList;
-        /*        const newCustomer = newCustomerList.find((customer) => customer.id === result.id);
-                if (newCustomer) {
-                  newCustomer.id = result.id;
-                  newCustomer.name = result.name;
-                  newCustomer.document = result.document;
-                }*/
-      })
-  }
-
-  loadEntities() {
-    this.bankService.listBanks().subscribe(
-      {
-        next: data => { this.bankList = <BankEntity[]>data
-        }
-      }
-    )
-  }
-
 }

@@ -1,49 +1,44 @@
-// src/app/mods/account/components/account-table/account-table.component.ts
-
-import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { Account } from '../../store/account-api';
-import { TableModule } from 'primeng/table';
-import { CommonModule, CurrencyPipe } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AccountResponse } from '../../models/account-model';
+import { FallbackPipe } from '../../../../shared/pipes/fallback.pipe';
+import { PRIMENG_MODULES } from '../../../../shared/primeng-modules';
 
 @Component({
   selector: 'app-account-table',
   standalone: true,
-  imports: [    CommonModule,
-    TableModule,
-    ButtonModule,
-    CurrencyPipe],
+  imports: [
+    CommonModule,
+    FallbackPipe,
+    PRIMENG_MODULES
+  ],
   templateUrl: './account-table.html',
-  styleUrl: './account-table.css'
+  styleUrl: './account-table.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountTable implements OnChanges {
+export class AccountTable {
 
-  _list: Account[] = [];
 
-  @Input() set list(list: Account[]) {
+  _list: AccountResponse[] = [];
+
+
+  @Input() set list(list: AccountResponse[]) {
     this._list = list;
   }
 
-  @Output() action = new EventEmitter<{ type: string, value: Account }>();
+  @Output() action = new EventEmitter<{ type: string, value: AccountResponse }>();
 
   constructor() {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log("Account table changes:", changes);
-  }
-
-  onEdit(account: Account, event: Event) {
+  onEdit(account: AccountResponse, event: Event) {
     event.stopPropagation();
     this.action.emit({ type: 'edit', value: account });
   }
 
-  onDelete(account: Account, event: Event) {
+  onDelete(account: AccountResponse, event: Event) {
     event.stopPropagation();
     this.action.emit({ type: 'delete', value: account });
   }
 
-  trackById(index: number, item: Account): number {
-  return item.id!;
-}
-}
 
+}

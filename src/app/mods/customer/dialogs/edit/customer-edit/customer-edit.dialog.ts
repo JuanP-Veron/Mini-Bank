@@ -1,23 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { InputText } from 'primeng/inputtext';
-import { Button } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { CustomerService } from '../../../services/customer-service';
-import { BankService } from '../../../../banks/services/bank.service';
-import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
-import { Customer } from '../../../store/customer-api';
-import { BankEntity } from '../../../../banks/store/bank.api';
+import { Customer } from '../../../models/customer-model';
+import { BankEntity } from '../../../../banks/models/banks-model';
+import { AppService } from '../../../../../core/services/appService';
+import { UiService } from '../../../../../core/services/UI/ui.service';
+import { PRIMENG_MODULES } from '../../../../../shared/primeng-modules';
 
 @Component({
   selector: 'app-customer-edit',
   standalone: true,
   imports: [
-    InputText,
-    Button,
+    PRIMENG_MODULES,
     FormsModule,
-    DropdownModule,
     CommonModule
   ],
   templateUrl: './customer-edit.dialog.html',
@@ -40,8 +36,8 @@ export class CustomerEditDialog implements OnInit {
   constructor(
     private ref: DynamicDialogRef,
     private config: DynamicDialogConfig,
-    private customerService: CustomerService,
-    private bankService: BankService
+    private appService: AppService,
+    private ui: UiService
   ) {}
 
   ngOnInit(): void {
@@ -52,15 +48,21 @@ export class CustomerEditDialog implements OnInit {
     }
   }
 
-  save(): void {
-    this.customerService.updateCustomer(this.model).subscribe({
-      next: () => this.ref.close({ success: true }),
-      error: (err) => console.error('Error al actualizar cliente', err)
-    });
-  }
+save(): void {
+  this.appService.customerApiService.updateCustomer(this.model).subscribe({
+    next: () => {
+      this.ui.showSuccess('Cliente actualizado', 'Se guardaron correctamente');
+      this.ref.close({ success: true });
+    },
+    error: (err) => {
+      this.ui.showError('Error al guardar', 'No se pudo actualizar el cliente');
+      console.error('Error al actualizar cliente', err);
+    },
+  });
+}
 
   private loadBanks(): void {
-    this.bankService.listBanks().subscribe({
+    this.appService.bankApiService.listBanks().subscribe({
       next: (data: any) => this.banks = data,
       error: (err) => console.error('Error al cargar bancos', err)
     });

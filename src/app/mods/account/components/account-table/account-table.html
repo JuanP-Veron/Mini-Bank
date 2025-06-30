@@ -1,35 +1,40 @@
-<p-table 
-  [value]="list" 
-  [tableStyle]="{ 'min-width': '50rem' }">
-  
+<p-table [value]="_list" [tableStyle]="{ 'min-width': '70rem' }">
+
   <ng-template pTemplate="header">
     <tr>
       <th>ID</th>
+      <th>Número</th>
       <th>Titular</th>
-      <th>Cliente</th>
+      <th>Tipo</th>
       <th>Saldo</th>
+      <th>Estado</th>
       <th style="text-align: center;">Acciones</th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body">
-    <tr *ngFor="let account of list; trackBy: trackById">
-      <td>{{ account.id }}</td>
-      <td>{{ account.holder }}</td>
-      <td>{{ account.customerId }}</td>
-      <td>{{ account.balance | currency:'PYG':'symbol':'1.0-0' }}</td>
-      <td style="text-align: center;">
-        <p-button 
-          icon="pi pi-pencil" 
-          styleClass="p-button-text" 
-          (click)="onEdit(account, $event)">
-        </p-button>
-        <p-button 
-          icon="pi pi-trash" 
-          styleClass="p-button-text" 
-          (click)="onDelete(account, $event)">
-        </p-button>
-      </td>
+  <ng-template pTemplate="body" let-account>
+    <tr>
+      <td>{{ account.id | fallback }}</td>
+      <td>{{ account.number | fallback:'-' }}</td>
+      <td>{{ account.holder | fallback:'Sin titular' }}</td>
+      <td>{{ account.type | fallback:'-' }}</td>
+      <td>{{ account.balance | currency:'₲ ':'symbol':'1.0-0' }}</td>
+      <td>{{ account.status | fallback:'-' }}</td>
+<td style="text-align: center; white-space: nowrap;">
+  <div style="display: flex; justify-content: center; gap: 1rem;">
+    <p-button 
+      icon="pi pi-pencil"
+      styleClass="p-button-text p-button-edit"
+      (click)="onEdit(account, $event)">
+    </p-button>
+    <p-button 
+      icon="pi pi-trash"
+      styleClass="p-button-text p-button-delete"
+      (click)="onDelete(account, $event)">
+    </p-button>
+  </div>
+</td>
     </tr>
   </ng-template>
+
 </p-table>

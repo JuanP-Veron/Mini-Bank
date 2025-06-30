@@ -1,0 +1,99 @@
+<form [formGroup]="accountForm" (ngSubmit)="save()" class="p-fluid" style="padding: 1rem; min-width: 400px; max-width: 600px">
+
+  <div class="p-field">
+    <label for="holder">Titular*</label>
+    <input id="holder" type="text" pInputText formControlName="holder" />
+    <small class="p-error" *ngIf="accountForm.get('holder')?.invalid && accountForm.get('holder')?.touched">
+      Campo obligatorio
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="number">Número de cuenta*</label>
+    <input id="number" type="text" pInputText formControlName="number" />
+    <small class="p-error" *ngIf="accountForm.get('number')?.invalid && accountForm.get('number')?.touched">
+      Campo obligatorio
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="type">Tipo de cuenta*</label>
+    <p-dropdown
+      inputId="type"
+      [options]="accountTypes"
+      formControlName="type"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Seleccione un tipo de cuenta">
+    </p-dropdown>
+    <small class="p-error" *ngIf="accountForm.get('type')?.invalid && accountForm.get('type')?.touched">
+      Campo obligatorio
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="currencyId">Moneda*</label>
+    <p-dropdown
+      inputId="currencyId"
+      [options]="currencies"
+      formControlName="currencyId"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Seleccione una moneda">
+    </p-dropdown>
+    <small class="p-error" *ngIf="accountForm.get('currencyId')?.invalid && accountForm.get('currencyId')?.touched">
+      Debe seleccionar una moneda
+    </small>
+  </div>
+
+  <div class="p-field">
+    <label for="customerId">Cliente*</label>
+    <p-dropdown
+      inputId="customerId"
+      [options]="customers"
+      formControlName="customerId"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Seleccione un cliente">
+    </p-dropdown>
+    <small class="p-error" *ngIf="accountForm.get('customerId')?.invalid && accountForm.get('customerId')?.touched">
+      Debe seleccionar un cliente
+    </small>
+  </div>
+
+  <!-- Campos condicionales -->
+  <ng-container *ngIf="accountForm.get('type')?.value === 0">
+    <div class="p-field">
+      <label for="savingType">Tipo de ahorro*</label>
+      <p-dropdown
+        inputId="savingType"
+        [options]="savingTypes"
+        formControlName="savingType"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Seleccione tipo de ahorro">
+      </p-dropdown>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="accountForm.get('type')?.value === 1">
+    <div class="p-field">
+      <label for="operationalLimit">Límite Operacional</label>
+      <input id="operationalLimit" type="number" pInputText formControlName="operationalLimit" />
+    </div>
+
+    <div class="p-field">
+      <label for="monthAverage">Promedio Mensual</label>
+      <input id="monthAverage" type="number" pInputText formControlName="monthAverage" />
+    </div>
+
+    <div class="p-field">
+      <label for="interest">Interés</label>
+      <input id="interest" type="number" pInputText formControlName="interest" />
+    </div>
+  </ng-container>
+
+  <div style="text-align: right; margin-top: 1.5rem;">
+    <p-button label="Guardar" type="submit" styleClass="p-button-success"></p-button>
+  </div>
+</form>

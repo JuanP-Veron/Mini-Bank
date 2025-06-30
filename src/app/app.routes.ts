@@ -4,12 +4,12 @@ import {authGuard} from './services/security/auth.guard';
 export const routes: Routes = [
     {
       path: 'login',
-      loadComponent: () => import('../app/portals/pub/login-page/login-page.component').then((m) => m.LoginPageComponent)
+      loadComponent: () => import('./portals/pub/login-page/login-page').then((m) => m.LoginPage)
     },
     {
       path: 'home',
       loadComponent: () => import('../app/portals/main/home-portal/home-portal').then((m) => m.HomePortal),
-     // canActivate: [authGuard],
+     //canActivate: [authGuard],
       children: [
         {
           path: 'clientes',
@@ -22,10 +22,6 @@ export const routes: Routes = [
         {
           path: 'bancos',
           loadComponent: () => import('../app/mods/banks/pages/bank-page/bank-page').then((m) => m.BankPage)
-        },
-        {
-          path: 'trasferencias',
-          loadComponent: () => import('../app/mods/transfer/page/transfer-page/transfer-page').then((m) => m.TransferPage)
         },
       ]
     },
@@ -41,19 +37,3 @@ export const routes: Routes = [
         'login'
     }
 ];
-
-/*
-* Sacar del routing la llamada al servicio customerservice
-* agregar al customer service provideIn: 'root'
-* crear el modulo de account y agregar que le account va a tener un customer por debajo
-* */
-// forma comun pero no tan recomendabe porque tarda en cargar 
-
-/*
-export const routes: Routes = [
-    {path: 'login', component: },
-    {path: 'inicio', component: , canAcrivate: [authGuard]},
-    {path: '', redirecTo: 'inicio', patMatch: 'full'},
-    {path: '**',redirectTo: '/login'}
-];
-*/

@@ -1,84 +1,73 @@
-import {Component} from '@angular/core';
-import {InputText} from 'primeng/inputtext';
-import {Button} from 'primeng/button';
-import {FormsModule} from '@angular/forms';
-import {BankEntity} from '../../store/bank.api';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {BankService} from '../../services/bank.service';
-import { MessageService } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+import { BankEntity } from '../../models/banks-model';
+import { AppService } from '../../../../core/services/appService';
+import { PRIMENG_MODULES } from '../../../../shared/primeng-modules';
+import { UiService } from '../../../../core/services/UI/ui.service';
 
 @Component({
-  selector: 'app-customer-add',
+  selector: 'app-bank-add',
+  standalone: true,
   imports: [
-    InputText,
-    Button,
-    FormsModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PRIMENG_MODULES,
   ],
   templateUrl: './bank-add.dialog.html',
   styleUrl: './bank-add.dialog.css'
 })
-export class BankAddDialog {
+export class BankAddDialog implements OnInit {
+  bankForm: FormGroup;
 
-  // customer?: Customer;
-  name?: string;
-  document?: string;
-  id?: number;
-
-  model : BankEntity ={
-    name: "",
-    phone: "",
-    mail: "",
-    address: "",
+  constructor(
+    private dialogRef: DynamicDialogRef,
+    private appService: AppService,
+    private fb: NonNullableFormBuilder,
+    private uiService: UiService
+  ) {
+    this.bankForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      phone: ['', [Validators.required]],
+      mail: ['', [Validators.email]],
+      address: ['', [Validators.required]]
+    });
   }
 
+  ngOnInit(): void {}
 
-  constructor(private dialogRef: DynamicDialogRef<BankAddDialog>,
-              private dialogConfig: DynamicDialogConfig,
-              private bankService: BankService,
-            private messageService: MessageService,
-         ) {
-
-  }
-
-
-
-
-save() {
-
-  this.bankService.addBank(this.model).subscribe({
-    next: () => {
-      this.dialogRef.close({ success: true, value: this.model });
-    },
-    error: err => {
-      const backendMessage = err?.error?.Message;
-      if (backendMessage?.includes('ya en uso')) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Duplicado',
-          detail: 'Ya existe un banco con ese nombre.'
-        });
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error del servidor',
-          detail: 'No se pudo guardar el banco.'
-        });
-      }
+  save(): void {
+    if (this.bankForm.invalid) {
+      this.markAllAsTouched();
+      this.uiService.showWarn('Formulario inválido', 'Por favor complete todos los campos requeridos correctamente');
+      return;
     }
-  });
-}
 
+    const bank: BankEntity = this.bankForm.value;
 
-
-
-  assignValue(value: any) {
-    this.id = value.id
-    this.name = value.name;
-    this.document = value.document;
+    this.appService.bankApiService.addBank(bank).subscribe({
+      next: () => {
+        this.uiService.showSuccess('Éxito', 'Banco guardado correctamente');
+        this.dialogRef.close({ success: true, value: bank });
+      },
+      error: err => {
+        const backendMessage = err?.error?.Message;
+        if (backendMessage?.includes('ya en uso')) {
+          this.uiService.showError('Duplicado', 'Ya existe un banco con ese nombre.');
+        } else {
+          this.uiService.showError('Error del servidor', 'No se pudo guardar el banco.');
+        }
+      }
+    });
   }
 
+  private markAllAsTouched(): void {
+    Object.values(this.bankForm.controls).forEach(control => {
+      control.markAsTouched({ onlySelf: true });
+    });
+  }
 }
-
-
-
-
