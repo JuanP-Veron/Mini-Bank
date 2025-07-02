@@ -6,7 +6,7 @@ MiniBank es una aplicación bancaria desarrollada con Angular 19 y PrimeNG como 
 
 ## 🚀 Demo en Vivo
 
-[![Demo en GitHub Pages](https://img.shields.io/badge/Demo-GitHub_Pages-blue?style=for-the-badge&logo=github)](https://tugithub.github.io/minibank)
+[![Clip para Ver el Demo](https://github.com/JuanP-Veron/clt/blob/master/public/MiniBank.PNG))](https://tugithub.github.io/minibank)
 
 ## ✨ Características Principales
 
