@@ -25,7 +25,7 @@ export class BankTable {
 
   constructor() {}
 
-  // Selección de fila (si se usa)
+
   onRowClick(bank: BankEntity, event: Event): void {
     event.stopPropagation();
     this.action.emit({
@@ -34,7 +34,7 @@ export class BankTable {
     });
   }
 
-  // Botón de editar
+
   onEdit(bank: BankEntity, event: Event): void {
     event.stopPropagation();
     this.action.emit({
@@ -43,7 +43,7 @@ export class BankTable {
     });
   }
 
-  // Botón de eliminar
+
   onDelete(bank: BankEntity, event: Event): void {
     event.stopPropagation();
     this.action.emit({

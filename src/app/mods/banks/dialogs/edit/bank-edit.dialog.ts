@@ -43,7 +43,7 @@ export class BankEditDialog implements OnInit {
 
   save(): void {
     this.ui.setLoading(true);
-    this.appService.bankApiService.unpdateBank(this.model).subscribe({
+    this.appService.bankApiService.updateBank(this.model).subscribe({
       next: () => {
         this.ui.showSuccess('Banco actualizado', 'Se guardaron correctamente');
         this.ref.close({ success: true });

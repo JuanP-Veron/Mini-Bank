@@ -1,0 +1,25 @@
+
+  <!-- Encabezado -->
+  <div class="header text-center mb-5">
+    <h1 class="main-title">MiniBank</h1>
+    <p class="subtitle">Tu plataforma bancaria Favorita</p>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats flex justify-content-between flex-wrap gap-3 mb-5">
+    <div class="stat-card" *ngIf="stats$ | async as stats">
+      <i class="pi pi-users stat-icon"></i>
+      <h2>{{ stats.customers }}</h2>
+      <p>Clientes</p>
+    </div>
+    <div class="stat-card" *ngIf="stats$ | async as stats">
+      <i class="pi pi-wallet stat-icon"></i>
+      <h2>{{ stats.accounts }}</h2>
+      <p>Cuentas</p>
+    </div>
+    <div class="stat-card" *ngIf="stats$ | async as stats">
+      <i class="pi pi-building stat-icon"></i>
+      <h2>{{ stats.banks }}</h2>
+      <p>Bancos</p>
+    </div>
+  </div>

@@ -1,40 +1,37 @@
-<p-table [value]="_list" 
-         [tableStyle]="{ 'min-width': '50rem' }"
-         [responsiveLayout]="'scroll'">
+<div class="table-wrapper">
+  <p-table
+    [value]="_list"
+    [tableStyle]="{ 'min-width': '100%' }"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Dirección</th>
+        <th>Correo Electrónico</th>
+        <th style="text-align: center;">Acciones</th>
+      </tr>
+    </ng-template>
 
-  <!-- CABECERA -->
-  <ng-template #header>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Teléfono</th>
-      <th>Dirección</th>
-      <th>Correo Electrónico</th>
-      <th style="text-align: center;">Acciones</th>
-    </tr>
-  </ng-template>
-
-  <!-- CUERPO -->
-  <ng-template #body let-bank>
-    <tr [pSelectableRow]="bank" (click)="onRowClick(bank, $event)">
-      <td>{{ bank.id | fallback:'Sin ID' }}</td>
-      <td>{{ bank.name | fallback:'Sin nombre' }}</td>
-      <td>{{ bank.phone | fallback:'Sin teléfono' }}</td>
-      <td>{{ bank.address | fallback:'Sin dirección' }}</td>
-      <td>{{ bank.mail | fallback:'Sin correo' }}</td>
-        <!-- ACCIONES -->
-      <td style="text-align: center; white-space: nowrap;">
-        <div  style="display: flex; justify-content: center; gap: 1rem;">
-          <p-button icon="pi pi-pencil" 
-                   styleClass="p-button-text p-button-edit" 
-                   (click)="onEdit(bank, $event)">
-          </p-button>
-          <p-button icon="pi pi-trash" 
-                   styleClass="p-button-text p-button-delete" 
-                   (click)="onDelete(bank, $event)">
-          </p-button>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+    <ng-template pTemplate="body" let-bank>
+      <tr [pSelectableRow]="bank" (click)="onRowClick(bank, $event)">
+        <td data-label="ID">{{ bank.id | fallback:'Sin ID' }}</td>
+        <td data-label="Nombre">{{ bank.name | fallback:'Sin nombre' }}</td>
+        <td data-label="Teléfono">{{ bank.phone | fallback:'Sin teléfono' }}</td>
+        <td data-label="Dirección">{{ bank.address | fallback:'Sin dirección' }}</td>
+        <td data-label="Correo">{{ bank.mail | fallback:'Sin correo' }}</td>
+        <td data-label="Acciones" style="text-align: center; white-space: nowrap;">
+          
+        <div class="action-buttons">
+        <p-button icon="pi pi-pencil" styleClass="p-button-text p-button-edit" (click)="onEdit(bank, $event)">
+        </p-button>
+        <p-button icon="pi pi-trash" styleClass="p-button-text p-button-delete" (click)="onDelete(bank, $event)">
+        </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

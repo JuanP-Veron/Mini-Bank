@@ -5,7 +5,6 @@ import { ConfirmationService } from 'primeng/api';
 
 import { AccountPutRequest, AccountResponse } from '../../models/account-model';
 import { AccountTable } from '../../components/account-table/account-table';
-import { AppService } from '../../../../core/services/appService';
 import { AccountEditDialog } from '../../dialogs/edit/account-edit/account-edit.dialog';
 import { ListEvent } from '../../../../shared/utils';
 import { CommonModule, AsyncPipe } from '@angular/common';
@@ -13,6 +12,7 @@ import { PRIMENG_MODULES } from '../../../../shared/primeng-modules';
 import { UiService } from '../../../../core/services/UI/ui.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AccountAddDialog } from '../../dialogs/add/account-add/account-add.dialog';
+import { AccountApiService } from '../../services/account-api.service';
 
 @Component({
   selector: 'app-account-page',
@@ -35,7 +35,8 @@ export class AccountPage implements OnInit, OnDestroy {
   private ref: DynamicDialogRef | null = null;
 
   constructor(
-    private appService: AppService,
+    //private appService: AppService,
+    private accountApiService: AccountApiService,
     private dialogService: DialogService,
     private confirmationService: ConfirmationService,
     private uiService: UiService
@@ -55,7 +56,7 @@ export class AccountPage implements OnInit, OnDestroy {
 
   private loadAccount(): void {
     this.uiService.setLoading(true);
-    this.appService.accountApiService.listAccount()
+    this.accountApiService.listAccount()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (accounts) => this.accountList.next(accounts),
@@ -76,7 +77,6 @@ export class AccountPage implements OnInit, OnDestroy {
     this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
       if (result?.success) {
         this.loadAccount();
-        this.uiService.showSuccess('Cuenta agregada', 'La cuenta fue creada correctamente.');
       }
       this.ref = null;
     });
@@ -94,7 +94,6 @@ export class AccountPage implements OnInit, OnDestroy {
     this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
       if (result?.success) {
         this.loadAccount();
-        this.uiService.showSuccess('Cuenta actualizada', 'Los cambios fueron guardados.');
       }
       this.ref = null;
     });
@@ -113,7 +112,7 @@ export class AccountPage implements OnInit, OnDestroy {
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
         this.uiService.setLoading(true);
-        this.appService.accountApiService.deleteAccount(account.id!)
+        this.accountApiService.deleteAccount(account.id!)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: () => {

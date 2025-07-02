@@ -1,0 +1,50 @@
+📁 src
+├── 📁 app
+│   ├── 📁 core
+│   │   └── 📁 services
+│   │       ├── appService.ts
+│   │       └── 📁 UI
+│   │           └── ui.service.ts
+│   ├── 📁 mods
+│   │   ├── 📁 account
+│   │   │   ├── 📁 components
+│   │   │   │   └── 📁 nombre-table
+│   │   │   │       ├── nombre-table.css
+│   │   │   │       ├── nombre-table.html
+│   │   │   │       └── nombre-table.ts
+│   │   │   ├── 📁 dialogs
+│   │   │   │   ├── 📁 nombre-add
+│   │   │   │   │   ├── nombre-add.dialog.css
+│   │   │   │   │   ├── nombre-add.dialog.html
+│   │   │   │   │   └── nombre-add.dialog.ts
+│   │   │   │   └── 📁 nombre-edit
+│   │   │   │       ├── nombre-edit.dialog.css
+│   │   │   │       ├── nombre-edit.dialog.html
+│   │   │   │       └── nombre-edit.dialog.ts
+│   │   │   ├── 📁 models
+│   │   │   │   └── nombre-model.ts
+│   │   │   ├── 📁 pages
+│   │   │   │   └── 📁 nombre-page
+│   │   │   │       ├── nombre-page.css
+│   │   │   │       ├── nombre-page.html
+│   │   │   │       └── nombre-page.ts
+│   │   │   └── 📁 services
+│   │   │       └── nombre-api.service.ts
+│   │   ├── 📁 banks
+│   │   └── 📁 customer
+│   ├── 📁 portals
+│   │   ├── 📁 main
+│   │   └── 📁 pub
+│   │      
+│   ├── 📁 services
+│   │   ├── security
+│   │   │   ├── app-security.service.ts
+│   │   │   └── auth.guard.ts
+│   ├── 📁 shared
+│   │   ├── 📁 pipes
+│   │   │   └── fallback.pipe.ts
+│   │   ├── 📁 services
+│   │   │   └── app-api.service.ts
+│   │   ├── primeng-modules.ts
+│   │   └── util.ts
+├── 📁 assets

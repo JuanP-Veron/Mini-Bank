@@ -1,38 +1,33 @@
-<p-table [value]="_list" [tableStyle]="{ 'min-width': '50rem' }">
-  
-  <!-- CABECERA -->
-  <ng-template pTemplate="header">
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Documento</th>
-      <th style="text-align: center;">Acciones</th>
-    </tr>
-  </ng-template>
+<div class="table-wrapper">
+  <p-table
+    [value]="_list"
+    [tableStyle]="{ 'min-width': '100%' }"
+    responsiveLayout="stack"
+    breakpoint="768px"
+  >
+    <!-- CABECERA -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Documento</th>
+        <th style="text-align: center;">Acciones</th>
+      </tr>
+    </ng-template>
 
-  <!-- CUERPO -->
-  <ng-template pTemplate="body" let-customer>
-    <tr [pSelectableRow]="customer">
-      <td>{{ customer.id | fallback:'Sin ID' }}</td>
-      <td>{{ customer.name  | fallback:'Sin nombre' }}</td>
-      <td>{{ customer.documentNumber  | fallback:'Sin Documento' }}</td>
-
-      <!-- ACCIONES -->
-      <td style="text-align: center; white-space: nowrap;">
-        <div style="display: flex; justify-content: center; gap: 1rem;">
-          <p-button 
-            icon="pi pi-pencil"
-            styleClass="p-button-text p-button-edit"
-            (click)="onEdit(customer, $event)">
-          </p-button>
-          <p-button 
-            icon="pi pi-trash"
-            styleClass="p-button-text p-button-delete"
-            (click)="onDelete(customer, $event)">
-          </p-button>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-
-</p-table>
+    <!-- CUERPO -->
+    <ng-template pTemplate="body" let-customer>
+      <tr [pSelectableRow]="customer">
+        <td data-label="ID">{{ customer.id | fallback:'Sin ID' }}</td>
+        <td data-label="Nombre">{{ customer.name | fallback:'Sin nombre' }}</td>
+        <td data-label="Documento">{{ customer.documentNumber | fallback:'Sin Documento' }}</td>
+        <td data-label="Acciones" style="text-align: center;">
+          <div class="action-buttons">
+            <p-button icon="pi pi-pencil" styleClass="p-button-text p-button-edit" (click)="onEdit(customer, $event)"></p-button>
+            <p-button icon="pi pi-trash" styleClass="p-button-text p-button-delete" (click)="onDelete(customer, $event)"></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

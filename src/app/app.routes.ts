@@ -9,8 +9,12 @@ export const routes: Routes = [
     {
       path: 'home',
       loadComponent: () => import('../app/portals/main/home-portal/home-portal').then((m) => m.HomePortal),
-     //canActivate: [authGuard],
+     canActivate: [authGuard],
       children: [
+        {
+          path: '',
+          loadComponent: () => import('../app/mods/home/home-page/home-page').then((m) => m.HomePage)
+        },
         {
           path: 'clientes',
           loadComponent: () => import('../app/mods/customer/pages/customer-page/customer-page').then((m) => m.CustomerPage)
@@ -25,7 +29,7 @@ export const routes: Routes = [
         },
       ]
     },
- 
+  
     {
       path: '',
       redirectTo: 'home',

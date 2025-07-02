@@ -71,7 +71,6 @@ export class BankPage implements OnInit, OnDestroy {
 
     this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
       if (result?.success && result.value) {
-        this.uiService.showSuccess('Agregado', 'Banco agregado correctamente');
         this.loadBanks();
       }
       this.ref = null;
@@ -83,13 +82,12 @@ export class BankPage implements OnInit, OnDestroy {
       data: { bank },
       header: 'Editar Banco',
       closable: true,
-      height: '40dvh',
+      height: '60dvh',
       width: '50dvh',
     });
 
     this.ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((result) => {
       if (result?.success) {
-        this.uiService.showSuccess('Actualizado', 'Banco actualizado correctamente');
         this.loadBanks();
       }
       this.ref = null;

@@ -43,9 +43,13 @@ export class CustomerEditDialog implements OnInit {
   ngOnInit(): void {
     this.loadBanks();
     
-    if (this.config.data?.customer) {
-      this.model = { ...this.config.data.customer, bankId: this.config.data.customer.bank.id };
-    }
+  if (this.config.data?.customer) {
+    this.model = { 
+      ...this.config.data.customer,
+      // Si el cliente tiene un objeto bank, extraemos el id
+      bankId: this.config.data.customer.bank?.id || this.config.data.customer.bankId
+    };
+  }
   }
 
 save(): void {

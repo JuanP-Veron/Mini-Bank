@@ -10,7 +10,6 @@ import { UiService } from '../../../../../core/services/UI/ui.service';
 
 import { Customer } from '../../../../customer/models/customer-model';
 import { Currency } from '../../../../currency/models/currency-model';
-
 @Component({
   selector: 'app-account-add',
   standalone: true,
@@ -60,8 +59,10 @@ export class AccountAddDialog implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.loadCustomers();
     this.loadCurrencies();
+    
   }
 
   save(): void {

@@ -1,40 +1,38 @@
-<p-table [value]="_list" [tableStyle]="{ 'min-width': '70rem' }">
+<div class="table-wrapper">
+  <p-table
+    [value]="_list"
+    [tableStyle]="{ 'min-width': '100%' }"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Número</th>
+        <th>Titular</th>
+        <th>Tipo</th>
+        <th>Saldo</th>
+        <th>Estado</th>
+        <th style="text-align: center;">Acciones</th>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="header">
-    <tr>
-      <th>ID</th>
-      <th>Número</th>
-      <th>Titular</th>
-      <th>Tipo</th>
-      <th>Saldo</th>
-      <th>Estado</th>
-      <th style="text-align: center;">Acciones</th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-account>
-    <tr>
-      <td>{{ account.id | fallback }}</td>
-      <td>{{ account.number | fallback:'-' }}</td>
-      <td>{{ account.holder | fallback:'Sin titular' }}</td>
-      <td>{{ account.type | fallback:'-' }}</td>
-      <td>{{ account.balance | currency:'₲ ':'symbol':'1.0-0' }}</td>
-      <td>{{ account.status | fallback:'-' }}</td>
-<td style="text-align: center; white-space: nowrap;">
-  <div style="display: flex; justify-content: center; gap: 1rem;">
-    <p-button 
-      icon="pi pi-pencil"
-      styleClass="p-button-text p-button-edit"
-      (click)="onEdit(account, $event)">
-    </p-button>
-    <p-button 
-      icon="pi pi-trash"
-      styleClass="p-button-text p-button-delete"
-      (click)="onDelete(account, $event)">
-    </p-button>
-  </div>
-</td>
-    </tr>
-  </ng-template>
-
-</p-table>
+    <ng-template pTemplate="body" let-account>
+      <tr>
+        <td data-label="ID">{{ account.id | fallback }}</td>
+        <td data-label="Número">{{ account.number | fallback:'-' }}</td>
+        <td data-label="Titular">{{ account.holder | fallback:'Sin titular' }}</td>
+        <td data-label="Tipo">{{ account.type | fallback:'-' }}</td>
+        <td data-label="Saldo">{{ account.balance | currency:'₲ ':'symbol':'1.0-0' }}</td>
+        <td data-label="Estado">{{ account.status | fallback:'-' }}</td>
+        <td data-label="Acciones" style="text-align: center; white-space: nowrap;">
+          <div class="action-buttons">
+            <p-button icon="pi pi-pencil" styleClass="p-button-text p-button-edit" (click)="onEdit(account, $event)">
+            </p-button>
+            <p-button icon="pi pi-trash" styleClass="p-button-text p-button-delete" (click)="onDelete(account, $event)">
+            </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

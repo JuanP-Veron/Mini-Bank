@@ -8,7 +8,7 @@ import { Currency } from "../models/currency-model";
 })
 
 export class CurrencyApiService {
-    private apiUrl= 'http://54.173.20.225:8080/api/Currency';
+    private apiUrl= 'http://54/api/Currency';
 
     constructor(private api: AppApiService) {  }
 

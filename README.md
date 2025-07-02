@@ -1,149 +1,68 @@
-# MiniBank
-📁 src
-├── 📁 app
-│   ├── 📁 core
-│   │   └── 📁 services
-│   │       ├── appService.ts
-│   │       └── 📁 UI
-│   │           └── ui.service.ts
-│   ├── 📁 mods
-│   │   ├── 📁 account
-│   │   │   ├── 📁 components
-│   │   │   │   └── 📁 nombre-table
-│   │   │   │       ├── nombre-table.css
-│   │   │   │       ├── nombre-table.html
-│   │   │   │       └── nombre-table.ts
-│   │   │   ├── 📁 dialogs
-│   │   │   │   ├── 📁 nombre-add
-│   │   │   │   │   ├── nombre-add.dialog.css
-│   │   │   │   │   ├── nombre-add.dialog.html
-│   │   │   │   │   └── nombre-add.dialog.ts
-│   │   │   │   └── 📁 nombre-edit
-│   │   │   │       ├── nombre-edit.dialog.css
-│   │   │   │       ├── nombre-edit.dialog.html
-│   │   │   │       └── nombre-edit.dialog.ts
-│   │   │   ├── 📁 models
-│   │   │   │   └── nombre-model.ts
-│   │   │   ├── 📁 pages
-│   │   │   │   └── 📁 nombre-page
-│   │   │   │       ├── nombre-page.css
-│   │   │   │       ├── nombre-page.html
-│   │   │   │       └── nombre-page.ts
-│   │   │   └── 📁 services
-│   │   │       └── nombre-api.service.ts
-│   │   ├── 📁 banks
-│   │   └── 📁 customer
-│   ├── 📁 portals
-│   │   ├── 📁 main
-│   │   └── 📁 pub
-│   │      
-│   ├── 📁 services
-│   │   ├── security
-│   │   │   ├── app-security.service.ts
-│   │   │   └── auth.guard.ts
-│   ├── 📁 shared
-│   │   ├── 📁 pipes
-│   │   │   └── fallback.pipe.ts
-│   │   ├── 📁 services
-│   │   │   └── app-api.service.ts
-│   │   ├── primeng-modules.ts
-│   │   └── util.ts
-├── 📁 assets
+# README - MiniBank Angular
 
-## Development server
+## 🏦 Descripción del Proyecto
 
+MiniBank es una aplicación bancaria desarrollada con Angular 19 y PrimeNG como parte del bootcamp de Angular de CLT S.A. La aplicación gestiona clientes, cuentas bancarias y operaciones básicas, con capacidad para trabajar tanto con datos locales como con una API externa.
 
+## 🚀 Demo en Vivo
 
+[![Demo en GitHub Pages](https://img.shields.io/badge/Demo-GitHub_Pages-blue?style=for-the-badge&logo=github)](https://tugithub.github.io/minibank)
 
+## ✨ Características Principales
 
-To start a local development server, run:
+- **Tecnologías Modernas**: Angular 19 + PrimeNG
+- **Arquitectura Limpia**: Estructura modular siguiendo mejores prácticas
+- **Doble Modo**: Funciona con datos locales o API externa (configurable)
+- **UI Profesional**: Interfaz responsive con PrimeNG
+- **Seguridad**: Implementa AuthGuard y servicios de autenticación
 
-```bash
-ng serve
+## 🛠 Estructura del Proyecto
+
+```
+src/
+├── app/
+│   ├── core/           # Servicios centrales
+│   ├── mods/           # Módulos funcionales
+│   │   ├── account/    # Gestión de cuentas
+│   │   ├── banks/      # Gestión de bancos
+│   │   └── customer/   # Gestión de clientes
+│   ├── portals/        # Vistas principales
+│   ├── services/       # Servicios compartidos
+│   └── shared/         # Utilidades compartidas
+├── assets/             # Recursos estáticos
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🔧 Instalación
 
-## Code scaffolding
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tugithub/minibank.git
+   cd mini-bank
+   ```
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+2. Instala dependencias:
+   ```bash
+   npm install
+   ```
 
-```bash
-ng generate component component-name
-```
+3. Configuración:
+   - Para modo local: No se requiere configuración adicional
+   - Para conectar a API: Configura cada Services/mods-api.service.ts
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+4. Inicia la aplicación:
+   ```bash
+   ng serve
+   ```
 
-```bash
-ng generate --help
-```
+## Authors
 
-## Building
+- [@JuanP-Veron](https://github.com/JuanP-Veron)
 
-To build the project run:
+## 🙏 Agradecimientos
 
-```bash
-ng build
-```
+- Equipo de CLT S.A. por el bootcamp de Angular 
+- Compañer@s del Bootcamp
+- Comunidad de PrimeNG por los componentes de UI
+- Mentores y compañeros del programa, Diego M. y Victor
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-´´BankEditDialog {
-
-  // customer?: Customer;
-  name?: string;
-  document?: string;
-  id?: number;
-
-
-  constructor(private dialogRef : DynamicDialogRef<BankEditDialog>,
-              private dialogConfig : DynamicDialogConfig) {
-
-  const customerData = dialogConfig?.data?.customer;
-  if (customerData) {
-    this.assignValue(customerData);
-  }
-
-  }
-
-
-
-
-  save(){
-/*    let model : Customer = {
-      id: this.id,
-      name: this.name,
-      document: this.document
-    }
-
-    this.dialogRef.close(model);*/
-  }
-
-  assignValue(value : any){
-    this.id = value.id
-    this.name = value.name;
-    this.document = value.document;
-  }
-
-}
+---

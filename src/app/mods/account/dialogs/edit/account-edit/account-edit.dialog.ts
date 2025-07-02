@@ -79,6 +79,7 @@ export class AccountEditDialog implements OnInit {
     });
   }
 
+  
   private loadCurrencies(): void {
     this.appService.currencyApiService.getCurrencyList().subscribe({
       next: (data: Currency[]) => this.currencies = data,
@@ -92,4 +93,5 @@ export class AccountEditDialog implements OnInit {
       error: (err) => console.error('Error al cargar clientes', err)
     });
   }
+    
 }

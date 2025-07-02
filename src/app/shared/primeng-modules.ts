@@ -8,6 +8,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ChartModule } from 'primeng/chart';
 
 export const PRIMENG_MODULES = [
     MenuModule,
@@ -19,4 +20,5 @@ export const PRIMENG_MODULES = [
     TableModule,
     InputTextModule,
     ConfirmDialog,
+    ChartModule
 ];
