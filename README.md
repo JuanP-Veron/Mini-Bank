@@ -2,7 +2,7 @@
 
 ## 🏦 Descripción del Proyecto
 
-MiniBank es una aplicación bancaria desarrollada con Angular 19 y PrimeNG como parte del bootcamp de Angular de CLT S.A. La aplicación gestiona clientes, cuentas bancarias y operaciones básicas, con capacidad para trabajar tanto con datos locales como con una API externa.
+MiniBank es una aplicación bancaria desarrollada con Angular 19 y PrimeNG como parte del bootcamp de Angular de CLT S.A. La aplicación gestiona clientes, cuentas bancarias y operaciones básicas, con capacidad para trabajar tanto con datos locales como con una API externa..
 
 ## 🚀 Demo en Vivo
 
